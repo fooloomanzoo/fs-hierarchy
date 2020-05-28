@@ -14,10 +14,9 @@ export default class FsHierarchyCLI extends Command {
 
   async run() {
     const { args, flags } = this.parse(FsHierarchyCLI);
+    const hierarchy = create(args.folder, flags.rootName);
 
-    process.stdout.write(
-      JSON.stringify(create(args.folder, flags.rootName), null, 2),
-    );
+    process.stdout.write(JSON.stringify(hierarchy, null, 2));
     process.stdout.write('\n');
   }
 }
