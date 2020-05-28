@@ -1,0 +1,16 @@
+{
+  "plugins": ["prettier"],
+  "extends": [
+    "oclif",
+    "oclif-typescript",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "prettier/prettier": "warn",
+    "node/no-extraneous-require": "warn"
+  }
+}
