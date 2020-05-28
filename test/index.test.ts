@@ -1,6 +1,6 @@
 import { expect, test } from '@oclif/test';
 
-import cmd from '../src';
+import { cli as cmd } from '../src';
 
 describe('fs-hierarchy', () => {
   test

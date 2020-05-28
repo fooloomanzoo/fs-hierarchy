@@ -1,4 +1,4 @@
-import { Hierarchy, Leaf } from './hierarchy.types';
+import { Hierarchy, Leaf } from './types';
 
 export const nodeFactory = (name: string, path: string): Hierarchy => ({
   name,

@@ -1,9 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Hierarchy } from './hierarchy.types';
-import { leafFactory, nodeFactory } from './hierarchy.factory';
+import { Hierarchy } from './types';
+import { leafFactory, nodeFactory } from './factories';
 
-const readdirRecursive = (location: string, parent: Hierarchy): Hierarchy =>
+export const readdirRecursive = (
+  location: string,
+  parent: Hierarchy,
+): Hierarchy =>
   fs
     .readdirSync(path.resolve(location))
     .reduce((result: Hierarchy, filename: string) => {
@@ -23,15 +26,3 @@ const readdirRecursive = (location: string, parent: Hierarchy): Hierarchy =>
 
       return result;
     }, parent);
-
-function create(root: string, rootName: string) {
-  const hierarchy: Hierarchy = {
-    name: rootName,
-    path: path.resolve(root),
-    children: [],
-  };
-
-  return readdirRecursive(hierarchy.path, hierarchy);
-}
-
-export default create;
