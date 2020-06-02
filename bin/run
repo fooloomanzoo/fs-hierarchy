@@ -2,8 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const errorHandler = require('@oclif/errors/handle');
-
 const project = path.join(__dirname, '../tsconfig.json');
 const dev = fs.existsSync(project);
 
@@ -12,5 +10,6 @@ if (dev) {
 }
 
 require(`../${dev ? 'src' : 'lib'}`)
-  .cli.run()
-  .catch(errorHandler);
+  .cli()
+  .run()
+  .catch(require('@oclif/errors/handle'));

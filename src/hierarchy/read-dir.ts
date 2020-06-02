@@ -1,28 +1,57 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Hierarchy } from './types';
-import { leafFactory, nodeFactory } from './factories';
+import { Node, Options } from './types';
+import { leafFactory, nodeFactory, resolveType, isLeaf } from './factories';
 
 export const readdirRecursive = (
-  location: string,
-  parent: Hierarchy,
-): Hierarchy =>
-  fs
-    .readdirSync(path.resolve(location))
-    .reduce((result: Hierarchy, filename: string) => {
-      const resolvedPath = path.resolve(location, filename);
-      const stat = fs.statSync(resolvedPath);
+  pathname: string,
+  hierarchy: Node,
+  options: Options,
+  rootPath: string = pathname,
+): Node => {
+  return fs
+    .readdirSync(pathname, { withFileTypes: true })
+    .reduce((result: Node, entry: fs.Dirent) => {
+      const type = resolveType(entry);
+      const resolvedPath = path.resolve(pathname, entry.name);
 
-      if (stat.isFile()) {
-        const leaf = leafFactory(filename, resolvedPath);
-        result.children.push(leaf);
-      } else if (stat.isDirectory()) {
-        const node = readdirRecursive(
-          resolvedPath,
-          nodeFactory(filename, resolvedPath),
+      if (
+        options.filter &&
+        (options.inverse
+          ? resolvedPath.match(options.filter)
+          : !resolvedPath.match(options.filter))
+      )
+        return result;
+
+      if (isLeaf(resolvedPath, type, options.followSymlinks, rootPath)) {
+        if (
+          options.leafFilter &&
+          (options.inverse
+            ? entry.name.match(options.leafFilter)
+            : !entry.name.match(options.leafFilter))
+        )
+          return result;
+        result.children.push(
+          leafFactory(entry.name, resolvedPath, type, options.include),
         );
-        result.children.push(node);
+      } else {
+        if (
+          options.nodeFilter &&
+          (options.inverse
+            ? entry.name.match(options.nodeFilter)
+            : !entry.name.match(options.nodeFilter))
+        )
+          return result;
+        result.children.push(
+          readdirRecursive(
+            resolvedPath,
+            nodeFactory(entry.name, resolvedPath, type, options.include),
+            options,
+            rootPath,
+          ),
+        );
       }
 
       return result;
-    }, parent);
+    }, hierarchy);
+};

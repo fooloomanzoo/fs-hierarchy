@@ -1,0 +1,668 @@
+starting a process... initializing
+[G[1A[Jstarting a process... custom message
+{
+  "name": "/",
+  "path": "/media/buddy",
+  "type": "dir",
+  "children": [
+    {
+      "name": "Ubuntu 19.10 amd64",
+      "path": "/media/buddy/Ubuntu 19.10 amd64",
+      "type": "dir",
+      "children": [
+        {
+          "name": ".disk",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/.disk",
+          "type": "dir",
+          "children": []
+        },
+        {
+          "name": "EFI",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/EFI",
+          "type": "dir",
+          "children": [
+            {
+              "name": "BOOT",
+              "path": "/media/buddy/Ubuntu 19.10 amd64/EFI/BOOT",
+              "type": "dir",
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "boot",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/boot",
+          "type": "dir",
+          "children": [
+            {
+              "name": "grub",
+              "path": "/media/buddy/Ubuntu 19.10 amd64/boot/grub",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "x86_64-efi",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/boot/grub/x86_64-efi",
+                  "type": "dir",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "casper",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/casper",
+          "type": "dir",
+          "children": []
+        },
+        {
+          "name": "dists",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/dists",
+          "type": "dir",
+          "children": [
+            {
+              "name": "eoan",
+              "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "main",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan/main",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "binary-amd64",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan/main/binary-amd64",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "binary-i386",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan/main/binary-i386",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "source",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan/main/source",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "restricted",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan/restricted",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "binary-amd64",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan/restricted/binary-amd64",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "binary-i386",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan/restricted/binary-i386",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "source",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/dists/eoan/restricted/source",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "install",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/install",
+          "type": "dir",
+          "children": []
+        },
+        {
+          "name": "isolinux",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/isolinux",
+          "type": "dir",
+          "children": []
+        },
+        {
+          "name": "pics",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/pics",
+          "type": "dir",
+          "children": []
+        },
+        {
+          "name": "pool",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/pool",
+          "type": "dir",
+          "children": [
+            {
+              "name": "main",
+              "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "b",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/b",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "b43-fwcutter",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/b/b43-fwcutter",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "d",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/d",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "dkms",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/d/dkms",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "e",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/e",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "efibootmgr",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/e/efibootmgr",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "elfutils",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/e/elfutils",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "expat",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/e/expat",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "g",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/g",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "gcc-9",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/g/gcc-9",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "glibc",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/g/glibc",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "grub2",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/g/grub2",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "grub2-signed",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/g/grub2-signed",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "l",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/l",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "llvm-toolchain-9",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/l/llvm-toolchain-9",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "lm-sensors",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/l/lm-sensors",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "lupin",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/l/lupin",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libb",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libb",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libbsd",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libb/libbsd",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libd",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libd",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libdrm",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libd/libdrm",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libe",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libe",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libedit",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libe/libedit",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libf",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libf",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libffi",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libf/libffi",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libg",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libg",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libglvnd",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libg/libglvnd",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libi",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libi",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libidn2",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libi/libidn2",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libp",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libp",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libpciaccess",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libp/libpciaccess",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libu",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libu",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libunistring",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libu/libunistring",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libv",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libv",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libvdpau",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libv/libvdpau",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "libx",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "libx11",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libx11",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "libxau",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libxau",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "libxcb",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libxcb",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "libxdamage",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libxdamage",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "libxdmcp",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libxdmcp",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "libxext",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libxext",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "libxfixes",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libxfixes",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "libxshmfence",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libxshmfence",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "libxxf86vm",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/libx/libxxf86vm",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "m",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/m",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "mesa",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/m/mesa",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "mouseemu",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/m/mouseemu",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "n",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/n",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "ncurses",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/n/ncurses",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "nvidia-prime",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/n/nvidia-prime",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "nvidia-settings",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/n/nvidia-settings",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "s",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/s",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "screen-resolution-extra",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/s/screen-resolution-extra",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "setserial",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/s/setserial",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "shim",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/s/shim",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "shim-signed",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/s/shim-signed",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "u",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/u",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "ubiquity",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/u/ubiquity",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "ubiquity-slideshow-ubuntu",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/u/ubiquity-slideshow-ubuntu",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "user-setup",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/u/user-setup",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "z",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/z",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "zlib",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/main/z/zlib",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "restricted",
+              "path": "/media/buddy/Ubuntu 19.10 amd64/pool/restricted",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "b",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/restricted/b",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "bcmwl",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/restricted/b/bcmwl",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "n",
+                  "path": "/media/buddy/Ubuntu 19.10 amd64/pool/restricted/n",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "nvidia-graphics-drivers-390",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/restricted/n/nvidia-graphics-drivers-390",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "nvidia-graphics-drivers-430",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/restricted/n/nvidia-graphics-drivers-430",
+                      "type": "dir",
+                      "children": []
+                    },
+                    {
+                      "name": "nvidia-graphics-drivers-435",
+                      "path": "/media/buddy/Ubuntu 19.10 amd64/pool/restricted/n/nvidia-graphics-drivers-435",
+                      "type": "dir",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "preseed",
+          "path": "/media/buddy/Ubuntu 19.10 amd64/preseed",
+          "type": "dir",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "casper-rw",
+      "path": "/media/buddy/casper-rw",
+      "type": "dir",
+      "children": [
+        {
+          "name": "crash",
+          "path": "/media/buddy/casper-rw/crash",
+          "type": "dir",
+          "children": []
+        },
+        {
+          "name": "log",
+          "path": "/media/buddy/casper-rw/log",
+          "type": "dir",
+          "children": [
+            {
+              "name": "apt",
+              "path": "/media/buddy/casper-rw/log/apt",
+              "type": "dir",
+              "children": []
+            },
+            {
+              "name": "cups",
+              "path": "/media/buddy/casper-rw/log/cups",
+              "type": "dir",
+              "children": []
+            },
+            {
+              "name": "gdm3",
+              "path": "/media/buddy/casper-rw/log/gdm3",
+              "type": "dir",
+              "children": []
+            },
+            {
+              "name": "installer",
+              "path": "/media/buddy/casper-rw/log/installer",
+              "type": "dir",
+              "children": []
+            },
+            {
+              "name": "private",
+              "path": "/media/buddy/casper-rw/log/private",
+              "type": "dir",
+              "children": []
+            },
+            {
+              "name": "unattended-upgrades",
+              "path": "/media/buddy/casper-rw/log/unattended-upgrades",
+              "type": "dir",
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "lost+found",
+          "path": "/media/buddy/casper-rw/lost+found",
+          "type": "dir",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

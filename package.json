@@ -12,6 +12,8 @@
     "@oclif/config": "^1.15.1",
     "@oclif/errors": "^1.2.2",
     "@oclif/plugin-help": "^3.0.1",
+    "@types/glob-to-regexp": "^0.4.0",
+    "glob-to-regexp": "^0.4.1",
     "tslib": "^1.13.0"
   },
   "devDependencies": {
@@ -19,7 +21,7 @@
     "@oclif/test": "^1.2.6",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^10.17.24",
+    "@types/node": "^10.10.0",
     "chai": "^4.2.0",
     "eslint": "^7.1.0",
     "eslint-config-oclif": "^3.1.0",
@@ -33,7 +35,7 @@
     "typescript": "^3.9.3"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=10.10.0"
   },
   "files": [
     "/bin",

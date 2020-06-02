@@ -1,8 +1,8 @@
 export default [
   {
-    name: 'folder',
+    name: 'path',
     required: false,
-    description: 'folder to create a hierarchy from',
+    description: 'path to create a hierarchy from',
     default: '.',
   },
 ];

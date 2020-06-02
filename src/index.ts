@@ -1,4 +1,4 @@
-import cli from './cli';
-import create from './hierarchy';
+import cli = require('./cli');
+import create = require('./cli');
 
 export = { create, cli };
