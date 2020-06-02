@@ -18,7 +18,7 @@ $ npm install -g fs-hierarchy
 $ fs-hierarchy COMMAND
 running command...
 $ fs-hierarchy (-v|--version|version)
-fs-hierarchy/0.0.1 linux-x64 node-v12.17.0
+fs-hierarchy/0.0.2 linux-x64 node-v12.17.0
 $ fs-hierarchy --help [COMMAND]
 USAGE
   $ fs-hierarchy COMMAND
