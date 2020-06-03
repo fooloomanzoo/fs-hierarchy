@@ -66,8 +66,6 @@ export = class FsHierarchyCLI extends Command {
       }
     }
 
-    (result as any).test = { s: 22, e: {h:"asss", rr: false},d:[1, "b", {c: 3}]}
-
     writer(formatter(result));
   }
 };
