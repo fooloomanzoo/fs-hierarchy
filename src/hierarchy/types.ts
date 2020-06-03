@@ -27,7 +27,7 @@ export interface Node extends Leaf {
 export type Hierarchy = Node | Leaf;
 
 export type Options = {
-  include: Array<'path' | 'extension' | 'type' | 'stats'>;
+  contain: Array<'path' | 'extension' | 'type' | 'stats'>;
   inverse?: boolean;
   filter?: RegExp;
   followSymlinks: boolean;

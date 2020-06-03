@@ -13,7 +13,7 @@ function hierarchy(root: string, options?: Options): Hierarchy {
       options?.rootName || resolvedPath,
       resolvedPath,
       type,
-      options?.include,
+      options?.contain,
     );
   }
 
@@ -23,7 +23,7 @@ function hierarchy(root: string, options?: Options): Hierarchy {
       options?.rootName || resolvedPath,
       resolvedPath,
       type,
-      options?.include,
+      options?.contain,
     ),
     options,
   );

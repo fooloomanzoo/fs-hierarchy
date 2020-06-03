@@ -26,16 +26,12 @@ export = class FsHierarchyCLI extends Command {
     let writer = toStdOut;
 
     const result = hierarchy(args.path, {
-      include: flags.include as Options['include'],
+      contain: flags.contain as Options['contain'],
       inverse: flags.inverse,
       filter: flags.filter ? globToRegExp(flags.filter) : undefined,
       followSymlinks: flags['follow-symlinks'],
-      leafFilter: flags['leaf-filter']
-        ? globToRegExp(flags['leaf-filter'])
-        : undefined,
-      nodeFilter: flags['node-filter']
-        ? globToRegExp(flags['node-filter'])
-        : undefined,
+      leafFilter: flags.leaf ? globToRegExp(flags.leaf) : undefined,
+      nodeFilter: flags.node ? globToRegExp(flags.node) : undefined,
       rootName: flags['root-name'],
     });
 

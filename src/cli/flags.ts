@@ -16,7 +16,7 @@ export default {
     options: ['json', 'tree', 'yaml'],
   }),
   'root-name': flags.string({
-    char: 'r',
+    char: 'n',
     description: 'used name for the root-folder',
   }),
   'follow-symlinks': flags.boolean({
@@ -25,26 +25,24 @@ export default {
     description:
       'follow symbolic links (cautious: do not use for circular structures)',
   }),
-  'include': flags.string({
-    char: 'i',
-    description: 'include in return object',
+  'contain': flags.string({
+    char: 'c',
+    description: 'included informations in return object',
     multiple: true,
     options: ['extension', 'path', 'stats', 'type'],
   }),
   'filter': flags.string({
-    char: 'F',
     description: 'filter for path names (glob)',
   }),
-  'leaf-filter': flags.string({
-    char: 'l',
+  'leaf': flags.string({
     description: 'specify filter for leafs (glob)',
+    dependsOn: ['filter'],
   }),
-  'node-filter': flags.string({
-    char: 'n',
+  'node': flags.string({
     description: 'specify filter for nodes (glob)',
+    dependsOn: ['filter'],
   }),
   'inverse': flags.boolean({
-    char: 'I',
     description: 'inverse filter',
     dependsOn: ['filter'],
   }),

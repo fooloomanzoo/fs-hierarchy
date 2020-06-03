@@ -6,25 +6,25 @@ export const leafFactory = (
   filename: string,
   pathname: string,
   type: Types,
-  include?: Options['include'],
+  contain?: Options['contain'],
 ): Leaf => {
   const ret: Leaf = {
     name: filename,
   };
-  if (include) {
-    if (include.includes('path')) {
+  if (contain) {
+    if (contain.includes('path')) {
       ret.path = pathname;
     }
 
-    if (include.includes('extension')) {
+    if (contain.includes('extension')) {
       ret.extension = path.extname(pathname);
     }
 
-    if (include.includes('stats')) {
+    if (contain.includes('stats')) {
       ret.stats = fs.lstatSync(pathname);
     }
 
-    if (include.includes('type')) {
+    if (contain.includes('type')) {
       ret.type = type;
     }
   }
@@ -35,10 +35,10 @@ export const nodeFactory = (
   filename: string,
   pathname: string,
   type: Types,
-  include?: Options['include'],
+  contain?: Options['contain'],
 ): Node => {
   return {
-    ...leafFactory(filename, pathname, type, include),
+    ...leafFactory(filename, pathname, type, contain),
     children: [],
   };
 };

@@ -32,7 +32,7 @@ export const readdirRecursive = (
         )
           return result;
         result.children.push(
-          leafFactory(entry.name, resolvedPath, type, options?.include),
+          leafFactory(entry.name, resolvedPath, type, options?.contain),
         );
       } else {
         if (
@@ -45,7 +45,7 @@ export const readdirRecursive = (
         result.children.push(
           readdirRecursive(
             resolvedPath,
-            nodeFactory(entry.name, resolvedPath, type, options?.include),
+            nodeFactory(entry.name, resolvedPath, type, options?.contain),
             options,
             rootPath,
           ),
