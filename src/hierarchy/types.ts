@@ -33,5 +33,5 @@ export type Options = {
   followSymlinks: boolean;
   leafFilter?: RegExp;
   nodeFilter?: RegExp;
-  rootName: string;
+  rootName?: string;
 };

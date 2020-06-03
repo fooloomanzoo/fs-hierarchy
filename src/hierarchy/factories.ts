@@ -6,27 +6,28 @@ export const leafFactory = (
   filename: string,
   pathname: string,
   type: Types,
-  include: Options['include'],
+  include?: Options['include'],
 ): Leaf => {
   const ret: Leaf = {
     name: filename,
   };
-  if (include.includes('path')) {
-    ret.path = pathname;
-  }
+  if (include) {
+    if (include.includes('path')) {
+      ret.path = pathname;
+    }
 
-  if (include.includes('extension')) {
-    ret.extension = path.extname(pathname);
-  }
+    if (include.includes('extension')) {
+      ret.extension = path.extname(pathname);
+    }
 
-  if (include.includes('stats')) {
-    ret.stats = fs.lstatSync(pathname);
-  }
+    if (include.includes('stats')) {
+      ret.stats = fs.lstatSync(pathname);
+    }
 
-  if (include.includes('type')) {
-    ret.type = type;
+    if (include.includes('type')) {
+      ret.type = type;
+    }
   }
-
   return ret;
 };
 
@@ -34,7 +35,7 @@ export const nodeFactory = (
   filename: string,
   pathname: string,
   type: Types,
-  include: Options['include'],
+  include?: Options['include'],
 ): Node => {
   return {
     ...leafFactory(filename, pathname, type, include),
@@ -55,7 +56,7 @@ export const resolveType = (entry: fs.Dirent | fs.Stats): Types => {
 export const isLeaf = (
   pathname: string,
   type: Types,
-  followSymlinks: boolean,
+  followSymlinks?: boolean,
   rootPath: string = pathname,
 ): boolean => {
   if (type === 'symlink') {

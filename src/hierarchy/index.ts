@@ -4,19 +4,29 @@ import { Hierarchy, Options } from './types';
 import { readdirRecursive } from './read-dir';
 import { resolveType, isLeaf, leafFactory, nodeFactory } from './factories';
 
-function create(root: string, rootName: string, options: Options): Hierarchy {
+function hierarchy(root: string, options?: Options): Hierarchy {
   const resolvedPath = resolve(root);
   const type = resolveType(lstatSync(resolvedPath));
 
-  if (isLeaf(resolvedPath, type, options.followSymlinks)) {
-    return leafFactory(rootName, resolvedPath, type, options.include);
+  if (isLeaf(resolvedPath, type, options?.followSymlinks)) {
+    return leafFactory(
+      options?.rootName || resolvedPath,
+      resolvedPath,
+      type,
+      options?.include,
+    );
   }
 
   return readdirRecursive(
     resolvedPath,
-    nodeFactory(rootName, resolvedPath, type, options.include),
+    nodeFactory(
+      options?.rootName || resolvedPath,
+      resolvedPath,
+      type,
+      options?.include,
+    ),
     options,
   );
 }
 
-export = create;
+export default hierarchy;

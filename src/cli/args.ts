@@ -5,4 +5,9 @@ export default [
     description: 'path to create a hierarchy from',
     default: '.',
   },
+  {
+    name: 'output',
+    required: false,
+    description: 'output filename',
+  },
 ];

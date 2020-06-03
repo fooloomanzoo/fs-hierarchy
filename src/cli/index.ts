@@ -1,27 +1,31 @@
 #!/usr/bin/env ts-node
 
 import { Command } from '@oclif/command';
+import * as path from 'path';
 import * as globToRegExp from 'glob-to-regexp';
+import type { Options } from '../hierarchy/types';
 
 import Flags from './flags';
 import Args from './args';
+import hierarchy from '../hierarchy';
+import { toJSONP, toTree, toYAML } from '../format';
+import { toFile, toStdOut } from '../write';
 
-import { Options } from '../hierarchy/types';
-import create = require('../hierarchy');
-
-class FsHierarchyCLI extends Command {
+export = class FsHierarchyCLI extends Command {
   static description = 'create a hierarchy map of files and folders';
 
   static flags = Flags;
 
   static args = Args;
 
-  static create = create;
+  static create = hierarchy;
 
   async run() {
     const { args, flags } = this.parse(FsHierarchyCLI);
+    let formatter;
+    let writer = toStdOut;
 
-    const hierarchy = create(args.path, flags['root-name'], {
+    const result = hierarchy(args.path, {
       include: flags.include as Options['include'],
       inverse: flags.inverse,
       filter: flags.filter ? globToRegExp(flags.filter) : undefined,
@@ -35,9 +39,35 @@ class FsHierarchyCLI extends Command {
       rootName: flags['root-name'],
     });
 
-    process.stdout.write(JSON.stringify(hierarchy, null, 2));
-    process.stdout.write('\n');
-  }
-}
+    switch (flags.format.toLowerCase()) {
+      case 'tree':
+        formatter = toTree;
+        break;
+      case 'yaml':
+        formatter = toYAML;
+        break;
+      case 'json':
+      default:
+        formatter = toJSONP;
+    }
 
-export = FsHierarchyCLI;
+    if (args.output) {
+      writer = toFile(args.output);
+      const extension = path.extname(args.output).toLowerCase();
+
+      switch (extension) {
+        case '.yml':
+        case '.yaml':
+          formatter = toYAML;
+          break;
+        case '.json':
+          formatter = toJSONP;
+          break;
+      }
+    }
+
+    (result as any).test = { s: 22, e: {h:"asss", rr: false},d:[1, "b", {c: 3}]}
+
+    writer(formatter(result));
+  }
+};

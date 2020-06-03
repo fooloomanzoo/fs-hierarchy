@@ -9,13 +9,14 @@ export default {
     char: 'v',
     description: 'show version',
   }),
-  'output': flags.string({
-    char: 'o',
-    description: 'used output filename',
+  'format': flags.string({
+    char: 'f',
+    default: 'json',
+    description: 'output format',
+    options: ['json', 'tree', 'yaml'],
   }),
   'root-name': flags.string({
     char: 'r',
-    default: '/',
     description: 'used name for the root-folder',
   }),
   'follow-symlinks': flags.boolean({
@@ -26,13 +27,12 @@ export default {
   }),
   'include': flags.string({
     char: 'i',
-    default: ['path'],
     description: 'include in return object',
     multiple: true,
     options: ['extension', 'path', 'stats', 'type'],
   }),
   'filter': flags.string({
-    char: 'f',
+    char: 'F',
     description: 'filter for path names (glob)',
   }),
   'leaf-filter': flags.string({
@@ -44,6 +44,7 @@ export default {
     description: 'specify filter for nodes (glob)',
   }),
   'inverse': flags.boolean({
+    char: 'I',
     description: 'inverse filter',
     dependsOn: ['filter'],
   }),
