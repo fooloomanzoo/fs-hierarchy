@@ -33,5 +33,6 @@ export type Options = {
   followSymlinks: boolean;
   leafFilter?: RegExp;
   nodeFilter?: RegExp;
+  noEmptyChildNodes?: boolean;
   rootName?: string;
 };

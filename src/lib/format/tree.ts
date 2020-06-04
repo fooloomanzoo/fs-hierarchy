@@ -1,5 +1,5 @@
-import { Hierarchy } from '../hierarchy/types';
-import { isNode } from '../hierarchy/typeguards';
+import type { Hierarchy } from '../types';
+import { isNode } from '../typeguards';
 
 const toTree = (h: Hierarchy, preemble = '') => {
   let tree = h.name + '\n';

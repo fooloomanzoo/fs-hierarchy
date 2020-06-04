@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Node, Leaf, Options, Types } from './types';
+import type { Node, Leaf, Options, Types } from '../types';
 
 export const leafFactory = (
   filename: string,
@@ -53,7 +53,7 @@ export const resolveType = (entry: fs.Dirent | fs.Stats): Types => {
   if (entry.isSocket()) return 'socket';
 };
 
-export const isLeaf = (
+export const shouldTreatAsLeaf = (
   pathname: string,
   type: Types,
   followSymlinks?: boolean,
@@ -63,7 +63,7 @@ export const isLeaf = (
     if (followSymlinks) {
       const realPath = fs.realpathSync(pathname);
       if (!realPath.startsWith(rootPath)) {
-        return isLeaf(
+        return shouldTreatAsLeaf(
           realPath,
           resolveType(fs.lstatSync(realPath)),
           followSymlinks,

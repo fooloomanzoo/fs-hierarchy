@@ -1,14 +1,19 @@
 import { lstatSync } from 'fs';
 import { resolve } from 'path';
-import { Hierarchy, Options } from './types';
+import type { Hierarchy, Options } from '../types';
 import { readdirRecursive } from './read-dir';
-import { resolveType, isLeaf, leafFactory, nodeFactory } from './factories';
+import {
+  resolveType,
+  shouldTreatAsLeaf,
+  leafFactory,
+  nodeFactory,
+} from './factories';
 
 function hierarchy(root: string, options?: Options): Hierarchy {
   const resolvedPath = resolve(root);
   const type = resolveType(lstatSync(resolvedPath));
 
-  if (isLeaf(resolvedPath, type, options?.followSymlinks)) {
+  if (shouldTreatAsLeaf(resolvedPath, type, options?.followSymlinks)) {
     return leafFactory(
       options?.rootName || resolvedPath,
       resolvedPath,
@@ -17,16 +22,14 @@ function hierarchy(root: string, options?: Options): Hierarchy {
     );
   }
 
-  return readdirRecursive(
+  const node = nodeFactory(
+    options?.rootName || resolvedPath,
     resolvedPath,
-    nodeFactory(
-      options?.rootName || resolvedPath,
-      resolvedPath,
-      type,
-      options?.contain,
-    ),
-    options,
+    type,
+    options?.contain,
   );
+
+  return readdirRecursive(resolvedPath, node, options) || node;
 }
 
 export default hierarchy;

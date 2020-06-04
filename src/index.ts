@@ -1,3 +1,3 @@
-import cli = require('./cli');
+import cli = require('./commands');
 
 export = cli;

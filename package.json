@@ -11,10 +11,11 @@
     "@oclif/command": "^1.6.1",
     "@oclif/config": "^1.15.1",
     "@oclif/errors": "^1.2.2",
-    "@oclif/plugin-help": "^3.0.1",
+    "@oclif/plugin-autocomplete": "^0.2.0",
+    "@oclif/plugin-help": "^3.1.0",
     "@types/glob-to-regexp": "^0.4.0",
     "glob-to-regexp": "^0.4.1",
-    "tslib": "^1.13.0"
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
@@ -48,12 +49,15 @@
   "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
-    "bin": "fs-hierarchy"
+    "bin": "fs-hierarchy",
+    "commands": "./src/commands",
+    "repositoryPrefix": "<%- repo %>/blob/<%- version %>/<%- commandPath %>"
   },
   "repository": "fooloomanzoo/fs-hierarchy",
   "scripts": {
-    "posttest": "eslint . --ext .ts --config .eslintrc",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev readme",
+    "pretest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && node utils/readme",
+    "postpack": "rm -f oclif.manifest.json",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },
