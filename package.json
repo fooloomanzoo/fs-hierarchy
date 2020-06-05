@@ -1,7 +1,7 @@
 {
   "name": "fs-hierarchy",
   "description": "create a hierarchy map of files and folders",
-  "version": "1.0.0-0",
+  "version": "1.0.0",
   "author": "Johannes Brautzsch @fooloomanzoo",
   "bin": {
     "fs-hierarchy": "./bin/run"
@@ -45,7 +45,13 @@
   ],
   "homepage": "https://github.com/fooloomanzoo/fs-hierarchy",
   "keywords": [
-    "hierarchy", "tree-structure", "tree-map", "tree", "fs", "nodejs", "cli"
+    "hierarchy",
+    "tree-structure",
+    "tree-map",
+    "tree",
+    "fs",
+    "nodejs",
+    "cli"
   ],
   "license": "MIT",
   "main": "lib/index.js",
