@@ -3,6 +3,7 @@
 import { Command } from '@oclif/command';
 import { flags } from '@oclif/command';
 import cli from 'cli-ux';
+import * as fs from 'fs';
 import * as path from 'path';
 import * as globToRegExp from 'glob-to-regexp';
 
@@ -118,7 +119,14 @@ export = class FsHierarchyCLI extends Command {
       }
     }
 
+    try {
+      await fs.promises.access(path.resolve(args.path));
+    } catch (error) {
+      this.error(error);
+    }
+
     cli.action.start('create hierarchy');
+
     const result = await FsHierarchyCLI.generateHierarchy(args.path, {
       include: {
         withExtension: flags.include?.includes('ext'),

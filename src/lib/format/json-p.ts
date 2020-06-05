@@ -3,4 +3,4 @@
  *
  * @param obj - the object
  */
-export const toJSONP = (obj: object) => JSON.stringify(obj, null, 2);
+export const toJSONP = (obj: object) => JSON.stringify(obj, null, '\t');
