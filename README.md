@@ -91,10 +91,27 @@ $ npm install fs-hierarchy
 ```javascript
 const { generateHierarchy } = require('fs-hirarchy');
 
-const myfiles = generateHierarchy('~');
-...
-
+const root = '...';
+const options = {...};
+const myfiles = generateHierarchy(root, options);
 ```
+
+## Options
+
+name | type | description
+--- | --- | ---
+included | *object* |  |
+*included*.withPath | *boolean* | if *true*, include **path** in return object 
+*included*.withType | *boolean* | if *true*, include **type** in return object
+*included*.withStats | *boolean* | if *true*, include **[stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)** in return object
+*included*.withExtension | *boolean* | if *true*, include **extension** in return object (only for leafs)
+inverse | *boolean* | inverse results for *filter*, *leafFilter* and *nodeFilter*
+filter | *string* or *RegExp* | filter for the absolute paths of the found leafs or the nodes
+followSymlinks | *bbolean* | if true and there is a symlink, it can be tried to follow the link and determine its children if it is a node
+leafFilter | *string* or *RegExp* | filter for the name of the found leafs
+nodeFilter | *string* or *RegExp* | filter for the name of the found nodes
+noEmptyChildNodes | *boolean* | if true, nodes with no children won't be returned (except for the root-node)
+rootName | *string* | to give the root a name
 
 # Examples
 <!-- examples -->
