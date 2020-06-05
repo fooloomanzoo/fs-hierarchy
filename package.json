@@ -45,7 +45,7 @@
   ],
   "homepage": "https://github.com/fooloomanzoo/fs-hierarchy",
   "keywords": [
-    "oclif"
+    "hierarchy", "tree-structure", "tree-map", "tree", "fs", "nodejs", "cli"
   ],
   "license": "MIT",
   "main": "lib/index.js",
