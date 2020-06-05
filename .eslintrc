@@ -1,16 +1,23 @@
 {
-  "plugins": ["prettier"],
+  "plugins": [
+    "@typescript-eslint/eslint-plugin",
+    "prettier",
+    "eslint-plugin-tsdoc"
+  ],
   "extends": [
     "oclif",
     "oclif-typescript",
     "prettier",
     "prettier/@typescript-eslint"
   ],
+  "parser": "@typescript-eslint/parser",
   "env": {
     "node": true
   },
   "rules": {
     "prettier/prettier": "warn",
-    "node/no-extraneous-require": "warn"
+    "node/no-extraneous-require": "warn",
+    "tsdoc/syntax": "warn",
+    "valid-jsdoc": "off"
   }
 }

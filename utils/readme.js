@@ -21,8 +21,13 @@ function replaceTag(source, tag, body) {
   );
 }
 
-async function run({ name, args = './src', outputType = 'json' }) {
-  const { stdout } = await exec('./bin/run -n "./src" ' + args, {
+async function run({
+  name,
+  args = './src',
+  hiddenArgs = '-n "./src" ',
+  outputType = 'json',
+}) {
+  const { stdout } = await exec('./bin/run ' + args + ' ' + hiddenArgs, {
     cwd: ROOT,
   });
   return `## ${name}\n 
@@ -44,6 +49,12 @@ async function main() {
   const content = await fs.readFile(README);
   const output = [
     await run({ name: 'JSON', args: './src', outputType: 'json' }),
+    await run({
+      name: 'with extension, path, type & stats',
+      args: './test -i ext path type stats',
+      hiddenArgs: '-n "./test"',
+      outputType: 'json',
+    }),
     await run({ name: 'YAML', args: './src -o yaml', outputType: 'yaml' }),
     await run({ name: 'Tree', args: './src -o tree', outputType: '' }),
   ].join('\n');

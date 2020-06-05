@@ -1,6 +1,12 @@
 import type { Hierarchy } from '../types';
 import { isNode } from '../typeguards';
 
+/**
+ * Returns a tree-string-representation for a given hierarchy-structure.
+ *
+ * @param h -        the hierarchy-structure
+ * @param preemble - the current intention-preemble of the the current recursion step
+ */
 const toTree = (h: Hierarchy, preemble = '') => {
   let tree = h.name + '\n';
 

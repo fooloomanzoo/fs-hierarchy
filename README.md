@@ -1,7 +1,16 @@
 fs-hierarchy
 ============
 
-create a hierarchy map of files and folders
+Create a hierarchy map of a filesystem using node's built-in **fs**. 
+
+You can use the CLI or include it directly in your project.
+It returns a structure that can be used in different contexts like for [d3-hierarchy](https://observablehq.com/@d3/d3-hierarchy). 
+
+Additionally it is possible:
+* to include extra informations like the file extension, the absolute path, the type and [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
+* filter paths and names
+* follow symbolic links
+* output in json, yaml or in a tree (CLI only)
 
 [![Version](https://img.shields.io/npm/v/fs-hierarchy.svg)](https://npmjs.org/package/fs-hierarchy)
 [![Downloads/week](https://img.shields.io/npm/dw/fs-hierarchy.svg)](https://npmjs.org/package/fs-hierarchy)
@@ -33,7 +42,7 @@ USAGE
 
 ## `fs-hierarchy [PATH] [OUTPUT]`
 
-create a hierarchy map of files and folders
+Create a hierarchy map of a filesystem using node's built-in *fs*.
 
 ```
 USAGE
@@ -44,18 +53,27 @@ ARGUMENTS
   OUTPUT  output filename
 
 OPTIONS
-  -c, --contain=ext|path|stats|type  included informations in return object
-  -f, --use-filter                   enable filters
+  -f, --use-filter                   use to enable filtering
   -h, --help                         show this help
-  -n, --root-name=root-name          used name for the root-folder
-  -o, --format=json|tree|yaml        [default: json] output format
+  -i, --include=ext|path|stats|type  the included informations in return object
+  -n, --root-name=root-name          the used name for the root-folder
+
+  -o, --format=json|tree|yaml        [default: json] used output format (overwritten if the the output path has a json-
+                                     or yml/yaml-extension)
+
   -s, --follow-symlinks              follow symbolic links
-  -v, --version                      show version
-  --filter=filter                    filter for all absolute path names (glob)
-  --inverse                          inverse filter
-  --leaf=leaf                        specify filter for leaf names (glob)
-  --no-empty-nodes                   filter child nodes that have no children
-  --node=node                        specify filter for node names (glob)
+
+  -v, --version                      show the version
+
+  --filter=filter                    the filter for all absolute path names (glob)
+
+  --inverse                          inverse the filters
+
+  --leaf=leaf                        specify the filter for leaf names (glob)
+
+  --no-empty-nodes                   to filter child nodes that have no children
+
+  --node=node                        specify the filter for node names (glob)
 ```
 
 _See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/0.0.6/src/commands/index.ts)_
@@ -140,6 +158,123 @@ $ fs-hierarchie ./src
           ]
         }
       ]
+    }
+  ]
+}
+
+```
+
+
+## with extension, path, type & stats
+ 
+```shell-script
+$ fs-hierarchie ./test -i ext path type stats
+```
+
+
+```json
+{
+  "name": "./test",
+  "path": "/home/buddy/projects/fs-hierarchy/test",
+  "type": "dir",
+  "stats": {
+    "dev": 2051,
+    "mode": 16893,
+    "nlink": 2,
+    "uid": 1000,
+    "gid": 1000,
+    "rdev": 0,
+    "blksize": 4096,
+    "ino": 2500760,
+    "size": 4096,
+    "blocks": 8,
+    "atimeMs": 1591303509513.5574,
+    "mtimeMs": 1590655938999.0305,
+    "ctimeMs": 1590655938999.0305,
+    "birthtimeMs": 1590655929458.9397,
+    "atime": "2020-06-04T20:45:09.514Z",
+    "mtime": "2020-05-28T08:52:18.999Z",
+    "ctime": "2020-05-28T08:52:18.999Z",
+    "birthtime": "2020-05-28T08:52:09.459Z"
+  },
+  "children": [
+    {
+      "name": "index.test.ts",
+      "path": "/home/buddy/projects/fs-hierarchy/test/index.test.ts",
+      "extension": ".ts",
+      "type": "file",
+      "stats": {
+        "dev": 2051,
+        "mode": 33204,
+        "nlink": 1,
+        "uid": 1000,
+        "gid": 1000,
+        "rdev": 0,
+        "blksize": 4096,
+        "ino": 2500771,
+        "size": 426,
+        "blocks": 8,
+        "atimeMs": 1591282346055.544,
+        "mtimeMs": 1590706118297.9292,
+        "ctimeMs": 1590706118297.9292,
+        "birthtimeMs": 1590655938999.0305,
+        "atime": "2020-06-04T14:52:26.056Z",
+        "mtime": "2020-05-28T22:48:38.298Z",
+        "ctime": "2020-05-28T22:48:38.298Z",
+        "birthtime": "2020-05-28T08:52:18.999Z"
+      }
+    },
+    {
+      "name": "mocha.opts",
+      "path": "/home/buddy/projects/fs-hierarchy/test/mocha.opts",
+      "extension": ".opts",
+      "type": "file",
+      "stats": {
+        "dev": 2051,
+        "mode": 33204,
+        "nlink": 1,
+        "uid": 1000,
+        "gid": 1000,
+        "rdev": 0,
+        "blksize": 4096,
+        "ino": 2500764,
+        "size": 92,
+        "blocks": 8,
+        "atimeMs": 1591108845893.1775,
+        "mtimeMs": 1590655929458.9397,
+        "ctimeMs": 1590655929458.9397,
+        "birthtimeMs": 1590655929458.9397,
+        "atime": "2020-06-02T14:40:45.893Z",
+        "mtime": "2020-05-28T08:52:09.459Z",
+        "ctime": "2020-05-28T08:52:09.459Z",
+        "birthtime": "2020-05-28T08:52:09.459Z"
+      }
+    },
+    {
+      "name": "tsconfig.json",
+      "path": "/home/buddy/projects/fs-hierarchy/test/tsconfig.json",
+      "extension": ".json",
+      "type": "file",
+      "stats": {
+        "dev": 2051,
+        "mode": 33204,
+        "nlink": 1,
+        "uid": 1000,
+        "gid": 1000,
+        "rdev": 0,
+        "blksize": 4096,
+        "ino": 2500761,
+        "size": 120,
+        "blocks": 8,
+        "atimeMs": 1591108845897.1775,
+        "mtimeMs": 1590655929458.9397,
+        "ctimeMs": 1590655929458.9397,
+        "birthtimeMs": 1590655929458.9397,
+        "atime": "2020-06-02T14:40:45.897Z",
+        "mtime": "2020-05-28T08:52:09.459Z",
+        "ctime": "2020-05-28T08:52:09.459Z",
+        "birthtime": "2020-05-28T08:52:09.459Z"
+      }
     }
   ]
 }

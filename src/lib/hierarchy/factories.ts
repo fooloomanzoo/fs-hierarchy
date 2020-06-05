@@ -1,48 +1,75 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import type { Node, Leaf, Options, Types } from '../types';
+import type { Node, Leaf, Types, Options } from '../types';
 
-export const leafFactory = (
-  filename: string,
+/**
+ * Returns a {@link Leaf}-object.
+ *
+ * @param name -     the name of the leaf
+ * @param pathname - the absolute path of the leaf
+ * @param type -     the type of the leaf
+ * @param include -  included within the return object
+ *
+ * @returns An object that contains informations about the wanted leaf.
+ */
+export function leafFactory(
+  name: string,
   pathname: string,
   type: Types,
-  contain?: Options['contain'],
-): Leaf => {
+  include: Options['include'] = {},
+): Leaf {
   const ret: Leaf = {
-    name: filename,
+    name,
   };
-  if (contain) {
-    if (contain.includes('path')) {
-      ret.path = pathname;
-    }
 
-    if (contain.includes('extension')) {
-      ret.extension = path.extname(pathname);
-    }
-
-    if (contain.includes('stats')) {
-      ret.stats = fs.lstatSync(pathname);
-    }
-
-    if (contain.includes('type')) {
-      ret.type = type;
-    }
+  if (include.withPath) {
+    ret.path = pathname;
   }
-  return ret;
-};
 
-export const nodeFactory = (
-  filename: string,
+  if (include.withExtension) {
+    ret.extension = path.extname(pathname);
+  }
+
+  if (include.withType) {
+    ret.type = type;
+  }
+
+  if (include.withStats) {
+    ret.stats = fs.lstatSync(pathname);
+  }
+
+  return ret;
+}
+
+/**
+ * Returns a {@link Node}-object.
+ *
+ * @param name -     the name of the node
+ * @param pathname - the absolute path of the node
+ * @param type -     the type of the node
+ * @param include -  included within the return object
+ *
+ * @returns An object that contains informations about the wanted node.
+ */
+export function nodeFactory(
+  name: string,
   pathname: string,
   type: Types,
-  contain?: Options['contain'],
-): Node => {
+  include: Options['include'] = {},
+): Node {
   return {
-    ...leafFactory(filename, pathname, type, contain),
+    ...leafFactory(name, pathname, type, { ...include, withExtension: false }),
     children: [],
   };
-};
+}
 
+/**
+ * Resolves the type of an entry given by *fs*.
+ *
+ * @param entry - an entry given by various *fs*-functions
+ *
+ * @returns the type of the entry
+ */
 export const resolveType = (entry: fs.Dirent | fs.Stats): Types => {
   if (entry.isFile()) return 'file';
   if (entry.isDirectory()) return 'dir';
@@ -53,27 +80,43 @@ export const resolveType = (entry: fs.Dirent | fs.Stats): Types => {
   if (entry.isSocket()) return 'socket';
 };
 
+/**
+ * Define which type should be treated like a {@link Leaf} or a {@link Node}.
+ *
+ * @param pathname -       the absolute path
+ * @param type -           the type of the entry
+ * @param followSymlinks - if true then symbol links are followed
+ * @param rootpath -       the path to the given root
+ *
+ * @returns if true the path should be treated like a leaf.
+ */
 export const shouldTreatAsLeaf = (
   pathname: string,
   type: Types,
   followSymlinks?: boolean,
-  rootPath: string = pathname,
+  rootpath: string = pathname,
 ): boolean => {
+  if (type === 'dir') return false;
+
   if (type === 'symlink') {
     if (followSymlinks) {
-      const realPath = fs.realpathSync(pathname);
-      if (!realPath.startsWith(rootPath)) {
-        return shouldTreatAsLeaf(
-          realPath,
-          resolveType(fs.lstatSync(realPath)),
-          followSymlinks,
-          rootPath,
-        );
-      }
+      // NOTE: the symbolic link's target might not exist
+      try {
+        const realpath = fs.realpathSync.native(pathname);
+        // NOTE: if the symbolic link is targeting a path whose path
+        //   starts with the one from where the recursion started, the
+        //   link is likely circular. attempt to prevent infinite loops
+        if (!realpath.startsWith(rootpath)) {
+          return shouldTreatAsLeaf(
+            realpath,
+            resolveType(fs.lstatSync(realpath)),
+            followSymlinks,
+            rootpath,
+          );
+        }
+      } catch {}
     }
-    return true;
   }
-  if (type === 'file') return true;
 
-  return false;
+  return true;
 };

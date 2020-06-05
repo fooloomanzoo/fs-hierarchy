@@ -1,3 +1,9 @@
+/**
+ * Returns a yaml-string for a given json-object.
+ *
+ * @param obj -   the object
+ * @param level - the current intention level of the recursion
+ */
 const toYAML = (obj: object, level = 0) => {
   let yaml = '';
   const isArray = Array.isArray(obj);
@@ -5,7 +11,7 @@ const toYAML = (obj: object, level = 0) => {
 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
-    const value = (obj as any)[key] as any;
+    const value = (obj as any)[key];
     const valueType = Object.prototype.toString.call(value);
 
     if (!(i === 0 && !isArray)) {
@@ -36,16 +42,16 @@ const toYAML = (obj: object, level = 0) => {
         break;
       case '[object Boolean]':
       case '[object Number]':
-        yaml += value;
+        yaml += value as boolean | number;
         break;
       case '[object Date]':
-        yaml += '"' + value.toString() + '"';
+        yaml += '"' + (value as Date).toISOString() + '"';
         break;
       case '[object String]':
-        yaml += '"' + value + '"';
+        yaml += '"' + (value as string) + '"';
         break;
       default:
-        yaml += value || '';
+        yaml += (value as any) || '';
     }
   }
 

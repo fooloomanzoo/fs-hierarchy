@@ -8,10 +8,20 @@ import {
   shouldTreatAsLeaf,
 } from './factories';
 
+/**
+ * Reads a directory recursively.
+ *
+ * @param pathname -  the absolute path of the node
+ * @param hierarchy - the recursivly applied **hierarchy**-structure
+ * @param options -   the given options
+ * @param rootPath -  the path to the given root (set by default at the first iteration)
+ *
+ * @returns the **Node**-structure or null (if optional *noEmptyChildNodes* is set to true and there are no children)
+ */
 export const readdirRecursive = (
   pathname: string,
   hierarchy: Node,
-  options?: Options,
+  options: Options,
   rootPath: string = pathname,
 ): Node | null => {
   const node = fs
@@ -20,6 +30,7 @@ export const readdirRecursive = (
       const type = resolveType(entry);
       const resolvedPath = path.resolve(pathname, entry.name);
 
+      // optionally apply filter to the absolute path of the child
       if (
         options?.filter &&
         (options.inverse
@@ -30,8 +41,9 @@ export const readdirRecursive = (
       }
 
       if (
-        shouldTreatAsLeaf(resolvedPath, type, options?.followSymlinks, rootPath)
+        shouldTreatAsLeaf(resolvedPath, type, options.followSymlinks, rootPath)
       ) {
+        // optionally apply filter to the name of a leaf
         if (
           options?.leafFilter &&
           (options.inverse
@@ -42,9 +54,10 @@ export const readdirRecursive = (
         }
 
         result.children.push(
-          leafFactory(entry.name, resolvedPath, type, options?.contain),
+          leafFactory(entry.name, resolvedPath, type, options.include),
         );
       } else {
+        // optionally apply filter to the name of a node
         if (
           options?.nodeFilter &&
           (options.inverse
@@ -56,7 +69,7 @@ export const readdirRecursive = (
 
         const child = readdirRecursive(
           resolvedPath,
-          nodeFactory(entry.name, resolvedPath, type, options?.contain),
+          nodeFactory(entry.name, resolvedPath, type, options.include),
           options,
           rootPath,
         );
@@ -68,6 +81,7 @@ export const readdirRecursive = (
       return result;
     }, hierarchy);
 
+  // optionally return **null** if there are no children
   if (options?.noEmptyChildNodes && node.children.length === 0) {
     return null;
   }

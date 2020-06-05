@@ -4,7 +4,6 @@ import { Command } from '@oclif/command';
 import { flags } from '@oclif/command';
 import * as path from 'path';
 import * as globToRegExp from 'glob-to-regexp';
-import type { Options } from '../lib/types';
 
 import hierarchy from '../lib/hierarchy';
 import { toJSONP, toTree, toYAML } from '../lib/format';
@@ -19,7 +18,12 @@ class FsHierarchyCLI extends Command {
     let writer = toStdOut;
 
     const result = this.create(args.path, {
-      contain: flags.contain as Options['contain'],
+      include: {
+        withExtension: flags.include?.includes('ext'),
+        withPath: flags.include?.includes('path'),
+        withStats: flags.include?.includes('stats'),
+        withType: flags.include?.includes('type'),
+      },
       inverse: flags.inverse,
       filter: flags.filter ? globToRegExp(flags.filter) : undefined,
       followSymlinks: flags['follow-symlinks'],
@@ -60,7 +64,8 @@ class FsHierarchyCLI extends Command {
   }
 }
 
-FsHierarchyCLI.description = 'create a hierarchy map of files and folders';
+FsHierarchyCLI.description =
+  "Create a hierarchy map of a filesystem using node's built-in *fs*.";
 
 FsHierarchyCLI.args = [
   {
@@ -83,51 +88,52 @@ FsHierarchyCLI.flags = {
   }),
   'version': flags.version({
     char: 'v',
-    description: 'show version',
+    description: 'show the version',
   }),
   'format': flags.string({
     char: 'o',
     default: 'json',
-    description: 'output format',
+    description:
+      'used output format (overwritten if the the output path has a json- or yml/yaml-extension)',
     options: ['json', 'tree', 'yaml'],
   }),
   'root-name': flags.string({
     char: 'n',
-    description: 'used name for the root-folder',
+    description: 'the used name for the root-folder',
   }),
   'follow-symlinks': flags.boolean({
     char: 's',
     default: false,
     description: 'follow symbolic links',
   }),
-  'contain': flags.string({
-    char: 'c',
-    description: 'included informations in return object',
+  'include': flags.string({
+    char: 'i',
+    description: 'the included informations in return object',
     multiple: true,
     options: ['ext', 'path', 'stats', 'type'],
   }),
   'use-filter': flags.boolean({
     char: 'f',
-    description: 'enable filters',
+    description: 'use to enable filtering',
   }),
   'filter': flags.string({
-    description: 'filter for all absolute path names (glob)',
+    description: 'the filter for all absolute path names (glob)',
     dependsOn: ['use-filter'],
   }),
   'leaf': flags.string({
-    description: 'specify filter for leaf names (glob)',
+    description: 'specify the filter for leaf names (glob)',
     dependsOn: ['use-filter'],
   }),
   'node': flags.string({
-    description: 'specify filter for node names (glob)',
+    description: 'specify the filter for node names (glob)',
     dependsOn: ['use-filter'],
   }),
   'inverse': flags.boolean({
-    description: 'inverse filter',
+    description: 'inverse the filters',
     dependsOn: ['use-filter'],
   }),
   'no-empty-nodes': flags.boolean({
-    description: 'filter child nodes that have no children',
+    description: 'to filter child nodes that have no children',
   }),
 };
 
