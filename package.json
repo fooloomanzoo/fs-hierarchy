@@ -1,7 +1,7 @@
 {
   "name": "fs-hierarchy",
   "description": "create a hierarchy map of files and folders",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "Johannes Brautzsch @fooloomanzoo",
   "bin": {
     "fs-hierarchy": "./bin/run"
