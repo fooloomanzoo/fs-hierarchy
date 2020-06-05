@@ -10,14 +10,14 @@ import { toJSONP, toTree, toYAML } from '../lib/format';
 import { toFile, toStdOut } from '../lib/write';
 
 class FsHierarchyCLI extends Command {
-  create = hierarchy;
+  static create = hierarchy;
 
   async run() {
     const { args, flags } = this.parse(FsHierarchyCLI);
     let formatter;
     let writer = toStdOut;
 
-    const result = this.create(args.path, {
+    const result = FsHierarchyCLI.create(args.path, {
       include: {
         withExtension: flags.include?.includes('ext'),
         withPath: flags.include?.includes('path'),
