@@ -30,7 +30,7 @@ $ npm install -g fs-hierarchy
 $ fs-hierarchy COMMAND
 running command...
 $ fs-hierarchy (-v|--version|version)
-fs-hierarchy/1.0.1 linux-x64 node-v12.18.0
+fs-hierarchy/1.0.2 linux-x64 node-v12.18.0
 $ fs-hierarchy --help [COMMAND]
 USAGE
   $ fs-hierarchy COMMAND
@@ -41,6 +41,8 @@ USAGE
 ## Commands
 <!-- commands -->
 * [`fs-hierarchy [PATH] [OUTPUT]`](#fs-hierarchy-path-output)
+* [`fs-hierarchy autocomplete [SHELL]`](#fs-hierarchy-autocomplete-shell)
+* [`fs-hierarchy help [COMMAND]`](#fs-hierarchy-help-command)
 
 ## `fs-hierarchy [PATH] [OUTPUT]`
 
@@ -78,7 +80,47 @@ OPTIONS
   --node=node                        specify the filter for node names (glob)
 ```
 
-_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.0.1/src/commands/index.ts)_
+_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.0.2/src/commands/index.ts)_
+
+## `fs-hierarchy autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ fs-hierarchy autocomplete [SHELL]
+
+ARGUMENTS
+  SHELL  shell type
+
+OPTIONS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+EXAMPLES
+  $ fs-hierarchy autocomplete
+  $ fs-hierarchy autocomplete bash
+  $ fs-hierarchy autocomplete zsh
+  $ fs-hierarchy autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.2.0/src/commands/autocomplete/index.ts)_
+
+## `fs-hierarchy help [COMMAND]`
+
+display help for fs-hierarchy
+
+```
+USAGE
+  $ fs-hierarchy help [COMMAND]
+
+ARGUMENTS
+  COMMAND  command to show help for
+
+OPTIONS
+  --all  see all commands in CLI
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
 <!-- commandsstop -->
 
 # Nodejs
