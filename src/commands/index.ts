@@ -2,6 +2,7 @@
 
 import { Command } from '@oclif/command';
 import { flags } from '@oclif/command';
+import cli from 'cli-ux';
 import * as path from 'path';
 import * as globToRegExp from 'glob-to-regexp';
 
@@ -90,22 +91,6 @@ export = class FsHierarchyCLI extends Command {
     let formatter;
     let writer = toStdOut;
 
-    const result = FsHierarchyCLI.generateHierarchy(args.path, {
-      include: {
-        withExtension: flags.include?.includes('ext'),
-        withPath: flags.include?.includes('path'),
-        withStats: flags.include?.includes('stats'),
-        withType: flags.include?.includes('type'),
-      },
-      inverse: flags.inverse,
-      filter: flags.filter ? globToRegExp(flags.filter) : undefined,
-      followSymlinks: flags['follow-symlinks'],
-      leafFilter: flags.leaf ? globToRegExp(flags.leaf) : undefined,
-      nodeFilter: flags.node ? globToRegExp(flags.node) : undefined,
-      noEmptyChildNodes: flags['no-empty-nodes'],
-      rootName: flags['root-name'],
-    });
-
     switch (flags.format.toLowerCase()) {
       case 'tree':
         formatter = toTree;
@@ -133,6 +118,26 @@ export = class FsHierarchyCLI extends Command {
       }
     }
 
+    cli.action.start('create hierarchy');
+    const result = await FsHierarchyCLI.generateHierarchy(args.path, {
+      include: {
+        withExtension: flags.include?.includes('ext'),
+        withPath: flags.include?.includes('path'),
+        withStats: flags.include?.includes('stats'),
+        withType: flags.include?.includes('type'),
+      },
+      inverse: flags.inverse,
+      filter: flags.filter ? globToRegExp(flags.filter) : undefined,
+      followSymlinks: flags['follow-symlinks'],
+      leafFilter: flags.leaf ? globToRegExp(flags.leaf) : undefined,
+      nodeFilter: flags.node ? globToRegExp(flags.node) : undefined,
+      noEmptyChildNodes: flags['no-empty-nodes'],
+      rootName: flags['root-name'],
+    });
+    cli.action.stop();
+
+    cli.action.start('write results');
     writer(formatter(result));
+    cli.action.stop();
   }
 };
