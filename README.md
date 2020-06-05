@@ -100,7 +100,7 @@ const myfiles = generateHierarchy(root, options);
 
 name | type | description
 --- | --- | ---
-included | *object* |  |
+*included* | **object** | included in the return object
 *included*.withPath | **boolean** | if *true*, include *path* in return object 
 *included*.withType | **boolean** | if *true*, include *type* in return object
 *included*.withStats | **boolean** | if *true*, include *[stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)* in return object
