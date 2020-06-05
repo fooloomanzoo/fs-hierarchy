@@ -55,11 +55,12 @@
     "repositoryPrefix": "<%- repo %>/blob/<%- version %>/<%- commandPath %>"
   },
   "repository": "fooloomanzoo/fs-hierarchy",
+  "private": false,
   "scripts": {
     "pretest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && node utils/readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "node utils/readme && git add README.md"
   },
-  "types": "lib/index.d.ts"
+  "types": "lib/types.d.ts"
 }
