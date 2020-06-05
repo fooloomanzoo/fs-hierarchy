@@ -1,4 +1,4 @@
-import type { Hierarchy } from '../types';
+import type { Hierarchy } from '../../types';
 import { isNode } from '../typeguards';
 
 /**
@@ -7,7 +7,7 @@ import { isNode } from '../typeguards';
  * @param h -        the hierarchy-structure
  * @param preemble - the current intention-preemble of the the current recursion step
  */
-const toTree = (h: Hierarchy, preemble = '') => {
+export const toTree = (h: Hierarchy, preemble = '') => {
   let tree = h.name + '\n';
 
   if (isNode(h)) {
@@ -23,5 +23,3 @@ const toTree = (h: Hierarchy, preemble = '') => {
 
   return tree;
 };
-
-export default toTree;

@@ -1,6 +1,6 @@
 import { lstatSync } from 'fs';
 import { resolve } from 'path';
-import type { Hierarchy, Options } from '../types';
+import type { Hierarchy, Options } from '../../types';
 import { readdirRecursive } from './read-dir';
 import {
   resolveType,
@@ -17,7 +17,7 @@ import {
  *
  * @returns {@link Hierarchy} returns a map that at least contains an entry of the name and an entry for its children entries, if there was given a path to directory-like entry of the filesystem
  */
-function hierarchy(
+export function hierarchy(
   root: string,
   options: Options = {
     inverse: false,
@@ -56,5 +56,3 @@ function hierarchy(
 
   return readdirRecursive(resolvedPath, node, options) || node;
 }
-
-export default hierarchy;

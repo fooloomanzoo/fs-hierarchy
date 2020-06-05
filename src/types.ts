@@ -1,4 +1,4 @@
-import { Stats } from 'fs';
+import type { Stats } from 'fs';
 
 /** Types of a {@link Leaf} or {@link Node} */
 export type Types =
@@ -32,7 +32,7 @@ export interface Node extends Omit<Leaf, 'extension'> {
   children: Array<Node | Leaf>;
 }
 
-export type Hierarchy = Node | Leaf;
+export declare type Hierarchy = Node | Leaf;
 
 export interface Options {
   /** included in the return object */

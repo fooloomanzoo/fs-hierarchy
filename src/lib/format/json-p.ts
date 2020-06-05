@@ -3,6 +3,4 @@
  *
  * @param obj - the object
  */
-const toJSONP = (obj: object) => JSON.stringify(obj, null, 2);
-
-export default toJSONP;
+export const toJSONP = (obj: object) => JSON.stringify(obj, null, 2);

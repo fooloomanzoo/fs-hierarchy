@@ -4,7 +4,7 @@
  * @param obj -   the object
  * @param level - the current intention level of the recursion
  */
-const toYAML = (obj: object, level = 0) => {
+export const toYAML = (obj: object, level = 0) => {
   let yaml = '';
   const isArray = Array.isArray(obj);
   const keys = Object.keys(obj);
@@ -57,5 +57,3 @@ const toYAML = (obj: object, level = 0) => {
 
   return yaml;
 };
-
-export default toYAML;

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import type { Node, Options } from '../types';
+import type { Node, Options } from '../../types';
 import {
   leafFactory,
   nodeFactory,

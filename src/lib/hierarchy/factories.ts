@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import type { Node, Leaf, Types, Options } from '../types';
+import type { Node, Leaf, Types, Options } from '../../types';
 
 /**
  * Returns a {@link Leaf}-object.

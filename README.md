@@ -17,12 +17,13 @@ Additionally it is possible:
 [![License](https://img.shields.io/npm/l/fs-hierarchy.svg)](https://github.com/fooloomanzoo/fs-hierarchy/blob/master/package.json)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+* [CLI](#cli)
+* [Nodejs](#nodejs)
 * [Examples](#examples)
 <!-- tocstop -->
   
-# Usage
+# CLI
+## Usage
 <!-- usage -->
 ```sh-session
 $ npm install -g fs-hierarchy
@@ -36,7 +37,8 @@ USAGE
 ...
 ```
 <!-- usagestop -->
-# Commands
+
+## Commands
 <!-- commands -->
 * [`fs-hierarchy [PATH] [OUTPUT]`](#fs-hierarchy-path-output)
 
@@ -78,6 +80,21 @@ OPTIONS
 
 _See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/0.0.9/src/commands/index.ts)_
 <!-- commandsstop -->
+
+# Nodejs
+## Usage
+
+```sh-session
+$ npm install fs-hierarchy
+```
+
+```javascript
+const { generateHierarchy } = require('fs-hirarchy');
+
+const myfiles = generateHierarchy('~');
+...
+
+```
 
 # Examples
 <!-- examples -->
@@ -141,9 +158,6 @@ $ fs-hierarchie ./src
           "name": "typeguards.ts"
         },
         {
-          "name": "types.ts"
-        },
-        {
           "name": "write",
           "children": [
             {
@@ -158,6 +172,9 @@ $ fs-hierarchie ./src
           ]
         }
       ]
+    },
+    {
+      "name": "types.ts"
     }
   ]
 }
@@ -310,12 +327,12 @@ children:
           - name: "index.ts"
           - name: "read-dir.ts"
       - name: "typeguards.ts"
-      - name: "types.ts"
       - name: "write"
         children: 
           - name: "file.ts"
           - name: "index.ts"
           - name: "stdout.ts"
+  - name: "types.ts"
 
 ```
 
@@ -332,22 +349,22 @@ $ fs-hierarchie ./src -o tree
  ├─ commands
  │  ╰─ index.ts
  ├─ index.ts
- ╰─ lib
-    ├─ format
-    │  ├─ index.ts
-    │  ├─ json-p.ts
-    │  ├─ tree.ts
-    │  ╰─ yaml.ts
-    ├─ hierarchy
-    │  ├─ factories.ts
-    │  ├─ index.ts
-    │  ╰─ read-dir.ts
-    ├─ typeguards.ts
-    ├─ types.ts
-    ╰─ write
-       ├─ file.ts
-       ├─ index.ts
-       ╰─ stdout.ts
+ ├─ lib
+ │  ├─ format
+ │  │  ├─ index.ts
+ │  │  ├─ json-p.ts
+ │  │  ├─ tree.ts
+ │  │  ╰─ yaml.ts
+ │  ├─ hierarchy
+ │  │  ├─ factories.ts
+ │  │  ├─ index.ts
+ │  │  ╰─ read-dir.ts
+ │  ├─ typeguards.ts
+ │  ╰─ write
+ │     ├─ file.ts
+ │     ├─ index.ts
+ │     ╰─ stdout.ts
+ ╰─ types.ts
 
 
 ```
