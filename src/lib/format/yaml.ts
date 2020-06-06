@@ -16,7 +16,7 @@ export const toYAML = (obj: object, level = 0) => {
 
     if (!(i === 0 && !isArray)) {
       yaml += '\n';
-      yaml += '\t'.repeat(level);
+      yaml += '  '.repeat(level);
     }
 
     if (isArray) {
@@ -36,7 +36,7 @@ export const toYAML = (obj: object, level = 0) => {
       case '[object Object]':
         if (!isArray) {
           yaml += '\n';
-          yaml += '\t'.repeat(level + 1);
+          yaml += '  '.repeat(level + 1);
         }
         yaml += toYAML(value as object | Array<any>, level + 1);
         break;

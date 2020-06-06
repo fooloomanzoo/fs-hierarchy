@@ -1,5 +1,5 @@
-import { toJSONP } from './json-p';
+import { toJSON } from './json';
 import { toTree } from './tree';
 import { toYAML } from './yaml';
 
-export { toJSONP, toTree, toYAML };
+export { toJSON, toTree, toYAML };

@@ -8,7 +8,7 @@ import * as path from 'path';
 import * as globToRegExp from 'glob-to-regexp';
 
 import { hierarchy } from '../lib/hierarchy';
-import { toJSONP, toTree, toYAML } from '../lib/format';
+import { toJSON, toTree, toYAML } from '../lib/format';
 import { toFile, toStdOut } from '../lib/write';
 
 export = class FsHierarchyCLI extends Command {
@@ -101,7 +101,7 @@ export = class FsHierarchyCLI extends Command {
         break;
       case 'json':
       default:
-        formatter = toJSONP;
+        formatter = toJSON(2);
     }
 
     if (args.output) {
@@ -114,7 +114,7 @@ export = class FsHierarchyCLI extends Command {
           formatter = toYAML;
           break;
         case '.json':
-          formatter = toJSONP;
+          formatter = toJSON();
           break;
       }
     }
