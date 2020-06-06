@@ -17,13 +17,13 @@ Additionally it is possible:
 [![License](https://img.shields.io/npm/l/fs-hierarchy.svg)](https://github.com/fooloomanzoo/fs-hierarchy/blob/master/package.json)
 
 <!-- toc -->
-* [CLI](#cli)
-* [Nodejs](#nodejs)
+* [Command line](#command-line)
+* [Programmatic use](#programmatic-use)
+* [Structures](#structures)
 * [Examples](#examples)
 <!-- tocstop -->
   
-# CLI
-## Usage
+# Command line
 <!-- usage -->
 ```sh-session
 $ npm install -g fs-hierarchy
@@ -41,7 +41,6 @@ USAGE
 ## Commands
 <!-- commands -->
 * [`fs-hierarchy [PATH] [OUTPUT]`](#fs-hierarchy-path-output)
-* [`fs-hierarchy autocomplete [SHELL]`](#fs-hierarchy-autocomplete-shell)
 * [`fs-hierarchy help [COMMAND]`](#fs-hierarchy-help-command)
 
 ## `fs-hierarchy [PATH] [OUTPUT]`
@@ -82,29 +81,6 @@ OPTIONS
 
 _See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.0.3/src/commands/index.ts)_
 
-## `fs-hierarchy autocomplete [SHELL]`
-
-display autocomplete installation instructions
-
-```
-USAGE
-  $ fs-hierarchy autocomplete [SHELL]
-
-ARGUMENTS
-  SHELL  shell type
-
-OPTIONS
-  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
-
-EXAMPLES
-  $ fs-hierarchy autocomplete
-  $ fs-hierarchy autocomplete bash
-  $ fs-hierarchy autocomplete zsh
-  $ fs-hierarchy autocomplete --refresh-cache
-```
-
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.2.0/src/commands/autocomplete/index.ts)_
-
 ## `fs-hierarchy help [COMMAND]`
 
 display help for fs-hierarchy
@@ -123,8 +99,7 @@ OPTIONS
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
 <!-- commandsstop -->
 
-# Nodejs
-## Usage
+# Programmatic use
 
 ```sh-session
 $ npm install fs-hierarchy
@@ -138,29 +113,115 @@ const options = {...};
 const myfiles = generateHierarchy(root, options);
 ```
 
+<!-- Options -->
 ## Options
+Use the options if want to filter the resulting [hierarchy](#Hierarchy) object or want to include extra informations.
 
-name | type | description
---- | --- | ---
-*included* | **object** | included in the return object
-*included*.withPath | **boolean** | if *true*, include *path* in return object 
-*included*.withType | **boolean** | if *true*, include *type* in return object
-*included*.withStats | **boolean** | if *true*, include *[stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)* in return object
-*included*.withExtension | **boolean** | if *true*, include *extension* in return object (only for leafs)
-inverse | **boolean** | inverse results for *filter*, *leafFilter* and *nodeFilter*
-filter | **string** or **RegExp** | filter for the absolute paths of the found leafs or the nodes
-followSymlinks | **boolean** | if true and there is a symlink, it can be tried to follow the link and determine its children if it is a node
-leafFilter | **string** or **RegExp** | filter for the name of the found leafs
-nodeFilter | **string** or **RegExp** | filter for the name of the found nodes
-noEmptyChildNodes | **boolean** | if true, nodes with no children won't be returned (except for the root-node)
-rootName | **string** | to give the root a name
+
+name | optional | type | description
+--- | --- | --- | ---
+filter | ☑ | [RegExp](#RegExp), string | filter for the absolute paths of the found [Leaf](#Leaf)s or the [Node](#Node)s
+followSymlinks | ☑ | boolean | if true and there is a symlink, it can be tried to follow the link and determine its children if it is a node
+include | ☑ | object | included in the return object
+*include*.withExtension | ☑ | boolean | if *true*, include the [extension](https://nodejs.org/api/path.html#path_path_extname_path) in return object (only for [Leaf](#Leaf)s)
+*include*.withPath | ☑ | boolean | if *true*, include the absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths) in return object
+*include*.withStats | ☑ | boolean | if *true*, include [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats) in return object
+*include*.withType | ☑ | boolean | if *true*, include [type](#Types) in return object
+inverse | ☑ | boolean | inverse results for *filter*, *leafFilter* and *nodeFilter*
+leafFilter | ☑ | [RegExp](#RegExp), string | filter for the name of the found [Leaf](#Leaf)s
+noEmptyChildNodes | ☑ | boolean | if true, [Node](#Node)s with no children won't be returned (except for the root-node)
+nodeFilter | ☑ | [RegExp](#RegExp), string | filter for the name of the found [Node](#Node)s
+rootName | ☑ | string | give the root a name
+<!-- Optionsstop -->
+
+# Structures
+
+As a return (when using *json* or *yaml* as the output format) there are certain properties available by default. Optional it is possible to include some extra properties.
+
+<!-- Hierarchy -->
+## Hierarchy
+
+[Leaf](#Leaf), [Node](#Node)
+
+
+<!-- Hierarchystop -->
+
+<!-- Node -->
+## Node
+**Node**-structure of the hierarchy map
+
+
+name | optional | type | description
+--- | --- | --- | ---
+children | ☐ | array | children of the node
+name | ☐ | string | the name of the entry (without the base path)
+path | ☑ | string | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
+stats | ☑ | undefined | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
+type | ☑ | undefined | optionally included [type](#Types) in the filesystem
+<!-- Nodestop -->
+
+<!-- Leaf -->
+## Leaf
+**Leaf**-structure of the hierarchy map
+
+
+name | optional | type | description
+--- | --- | --- | ---
+extension | ☑ | string | optionally included [extension](https://nodejs.org/api/path.html#path_path_extname_path) (only for [Leaf](#Leaf)s)
+name | ☐ | string | the name of the entry (without the base path)
+path | ☑ | string | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
+stats | ☑ | undefined | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
+type | ☑ | undefined | optionally included [type](#Types) in the filesystem
+<!-- Leafstop -->
+
+<!-- Types -->
+## Types
+Types of a [Leaf](#Leaf) or [Node](#Node) entry
+
+* `block-device`
+* `char-device`
+* `dir`
+* `file`
+* `pipe`
+* `socket`
+* `symlink`
+
+<!-- Typesstop -->
+
+<!-- Stats -->
+## Stats
+
+
+
+name | optional | type | description
+--- | --- | --- | ---
+atime | ☐ | string | Enables basic storage and retrieval of dates and times.
+atimeMs | ☐ | number | ─
+birthtime | ☐ | string | Enables basic storage and retrieval of dates and times.
+birthtimeMs | ☐ | number | ─
+blksize | ☐ | number | ─
+blocks | ☐ | number | ─
+ctime | ☐ | string | Enables basic storage and retrieval of dates and times.
+ctimeMs | ☐ | number | ─
+dev | ☐ | number | ─
+gid | ☐ | number | ─
+ino | ☐ | number | ─
+mode | ☐ | number | ─
+mtime | ☐ | string | Enables basic storage and retrieval of dates and times.
+mtimeMs | ☐ | number | ─
+nlink | ☐ | number | ─
+rdev | ☐ | number | ─
+size | ☐ | number | ─
+uid | ☐ | number | ─
+<!-- Statsstop -->
+
 
 # Examples
 <!-- examples -->
 ## JSON
  
 ```shell-script
-$ fs-hierarchie ./src
+$ fs-hierarchy ./src
 ```
 
 
@@ -244,7 +305,7 @@ $ fs-hierarchie ./src
 ## with extension, path, type & stats
  
 ```shell-script
-$ fs-hierarchie ./test -i ext path type stats
+$ fs-hierarchy ./test -i ext path type stats
 ```
 
 
@@ -361,7 +422,7 @@ $ fs-hierarchie ./test -i ext path type stats
 ## YAML
  
 ```shell-script
-$ fs-hierarchie ./src -o yaml
+$ fs-hierarchy ./src -o yaml
 ```
 
 
@@ -399,7 +460,7 @@ children:
 ## Tree
  
 ```shell-script
-$ fs-hierarchie ./src -o tree
+$ fs-hierarchy ./src -o tree
 ```
 
 

@@ -9,8 +9,6 @@
   "bugs": "https://github.com/fooloomanzoo/fs-hierarchy/issues",
   "dependencies": {
     "@oclif/command": "^1.6.1",
-    "@oclif/errors": "^1.2.2",
-    "@oclif/plugin-autocomplete": "^0.2.0",
     "@oclif/plugin-help": "^3.1.0",
     "cli-ux": "^5.4.6",
     "glob-to-regexp": "^0.4.1"
@@ -33,7 +31,8 @@
     "mocha": "^5.2.0",
     "prettier": "^2.0.5",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.3",
+    "typescript-json-schema": "^0.42.0"
   },
   "engines": {
     "node": ">=10.10.0"
@@ -60,8 +59,7 @@
     "commands": "./src/commands",
     "repositoryPrefix": "<%- repo %>/blob/<%- version %>/<%- commandPath %>",
     "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-autocomplete"
+      "@oclif/plugin-help"
     ]
   },
   "repository": "fooloomanzoo/fs-hierarchy",

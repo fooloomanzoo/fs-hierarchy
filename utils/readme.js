@@ -21,7 +21,7 @@ function replaceTag(source, tag, body) {
   );
 }
 
-async function run({
+async function createOutputMd({
   name,
   args = './src',
   hiddenArgs = '-n "./src" ',
@@ -32,7 +32,7 @@ async function run({
   });
   return `## ${name}\n 
 \`\`\`shell-script
-$ fs-hierarchie ${args}
+$ fs-hierarchy ${args}
 \`\`\`\n
 
 \`\`\`${outputType}
@@ -41,25 +41,101 @@ ${stdout}
 `;
 }
 
+async function createSchema() {
+  const { stdout } = await exec(
+    'node ./node_modules/.bin/typescript-json-schema ./src/types.ts "*" --required',
+    {
+      cwd: ROOT,
+    },
+  );
+  return JSON.parse(stdout);
+}
+
+function createSchemaTable(schema, title) {
+  const createAnyOf = anyOf =>
+    anyOf &&
+    anyOf
+      .map(
+        o =>
+          o.type ||
+          `[${o.$ref.replace('#/definitions/', '')}](${o.$ref.replace(
+            '/definitions/',
+            '',
+          )})`,
+      )
+      .join(', ');
+  const createEntry = (key, entry, required) => {
+    let row = `${key} | ${required ? '☐' : '☑'} | ${
+      entry.type || createAnyOf(entry.anyOf)
+    } | ${entry.description || '─'}`;
+    if (entry.properties) {
+      // eslint-disable-next-line guard-for-in
+      for (const p in entry.properties) {
+        row += '\n' + createEntry(`*${key}*.${p}`, entry.properties[p]);
+      }
+    }
+    return row;
+  };
+
+  return `${title}
+${schema.description ? schema.description : ''}
+${schema.anyOf ? createAnyOf(schema.anyOf) : ''}
+${schema.enum ? schema.enum.map(e => `* \`${e}\``).join('\n') : ''}
+${
+  schema.properties
+    ? `name | optional | type | description
+--- | --- | --- | ---
+${Object.entries(schema.properties)
+  .map(([key, entry]) =>
+    createEntry(key, entry, schema.required && schema.required.includes(key)),
+  )
+  .join('\n')}`
+    : ''
+}`;
+}
+
 async function main() {
   await exec('oclif-dev readme', {
     cwd: ROOT,
   });
 
-  const content = await fs.readFile(README);
-  const output = [
-    await run({ name: 'JSON', args: './src', outputType: 'json' }),
-    await run({
+  const schema = await createSchema();
+
+  const outputs = [
+    await createOutputMd({
+      name: 'JSON',
+      args: './src',
+      outputType: 'json',
+    }),
+    await createOutputMd({
       name: 'with extension, path, type & stats',
       args: './test -i ext path type stats',
       hiddenArgs: '-n "./test"',
       outputType: 'json',
     }),
-    await run({ name: 'YAML', args: './src -o yaml', outputType: 'yaml' }),
-    await run({ name: 'Tree', args: './src -o tree', outputType: '' }),
+    await createOutputMd({
+      name: 'YAML',
+      args: './src -o yaml',
+      outputType: 'yaml',
+    }),
+    await createOutputMd({
+      name: 'Tree',
+      args: './src -o tree',
+      outputType: '',
+    }),
   ].join('\n');
-  const modified = replaceTag(content.toString(), 'examples', output);
-  await fs.writeFile(README, modified);
+
+  let content = (await fs.readFile(README)).toString();
+
+  content = replaceTag(content, 'examples', outputs);
+
+  // eslint-disable-next-line guard-for-in
+  for (const key in schema.definitions) {
+    const table = createSchemaTable(schema.definitions[key], `## ${key}`);
+    content = replaceTag(content, key, table);
+  }
+
+  await fs.writeFile(README, content);
 }
 
 main();
