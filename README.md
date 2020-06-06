@@ -30,7 +30,7 @@ $ npm install -g fs-hierarchy
 $ fs-hierarchy COMMAND
 running command...
 $ fs-hierarchy (-v|--version|version)
-fs-hierarchy/1.0.3 linux-x64 node-v12.18.0
+fs-hierarchy/1.0.4 linux-x64 node-v12.18.0
 $ fs-hierarchy --help [COMMAND]
 USAGE
   $ fs-hierarchy COMMAND
@@ -79,7 +79,7 @@ OPTIONS
   --node=node                        specify the filter for node names (glob)
 ```
 
-_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.0.3/src/commands/index.ts)_
+_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.0.4/src/commands/index.ts)_
 
 ## `fs-hierarchy help [COMMAND]`
 
