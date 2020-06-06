@@ -52,21 +52,18 @@ async function createSchema() {
 }
 
 function createSchemaTable(schema, title) {
-  const createAnyOf = anyOf =>
-    anyOf &&
-    anyOf
-      .map(
-        o =>
-          o.type ||
-          `[${o.$ref.replace('#/definitions/', '')}](${o.$ref.replace(
-            '/definitions/',
-            '',
-          )})`,
-      )
-      .join(', ');
+  const createType = entry =>
+    entry.type ||
+    (entry.$ref &&
+      `[${entry.$ref.replace('#/definitions/', '')}](${entry.$ref.replace(
+        '/definitions/',
+        '',
+      )})`);
+
+  const createAnyOf = entries => entries && entries.map(createType).join(', ');
   const createEntry = (key, entry, required) => {
     let row = `${key} | ${required ? '☐' : '☑'} | ${
-      entry.type || createAnyOf(entry.anyOf)
+      createType(entry) || createAnyOf(entry.anyOf) || '─'
     } | ${entry.description || '─'}`;
     if (entry.properties) {
       // eslint-disable-next-line guard-for-in

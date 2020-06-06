@@ -156,8 +156,8 @@ name | optional | type | description
 children | ☐ | array | children of the node
 name | ☐ | string | the name of the entry (without the base path)
 path | ☑ | string | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
-stats | ☑ | undefined | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
-type | ☑ | undefined | optionally included [type](#Types) in the filesystem
+stats | ☑ | [Stats](#Stats) | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
+type | ☑ | [Types](#Types) | optionally included [type](#Types) in the filesystem
 <!-- Nodestop -->
 
 <!-- Leaf -->
@@ -170,8 +170,8 @@ name | optional | type | description
 extension | ☑ | string | optionally included [extension](https://nodejs.org/api/path.html#path_path_extname_path) (only for [Leaf](#Leaf)s)
 name | ☐ | string | the name of the entry (without the base path)
 path | ☑ | string | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
-stats | ☑ | undefined | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
-type | ☑ | undefined | optionally included [type](#Types) in the filesystem
+stats | ☑ | [Stats](#Stats) | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
+type | ☑ | [Types](#Types) | optionally included [type](#Types) in the filesystem
 <!-- Leafstop -->
 
 <!-- Types -->
