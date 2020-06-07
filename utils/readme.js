@@ -126,34 +126,34 @@ async function main() {
 
   const filtering = [
     await createOutputMd({
-      name: 'matching files',
-      args: "./test --filter '*.json'",
+      name: 'match files',
+      args: "./src --filter 'index.ts'",
       outputType: '',
     }),
     await createOutputMd({
-      name: 'glob matching including empty nodes',
+      name: 'match (including empty nodes)',
       args: "./src -o tree -f '**/format/*'",
       outputType: '',
     }),
     await createOutputMd({
       name: 'filter empty nodes',
-      args: "./src -o tree -f '**/format/*' --no-empty",
+      args: "./src -o tree --no-empty -f '**/format/*'",
       outputType: '',
     }),
     await createOutputMd({
-      name: 'pattern list',
+      name: 'glob pattern list',
       args: "./src -o tree -f '*@(e|x).ts'",
       hiddenArgs: '-r "./src"',
       outputType: '',
     }),
     await createOutputMd({
-      name: 'brace expansion',
-      args: "./ -o tree -f '**/{utils,docker}/**/*.d.ts' -n",
+      name: 'glob brace expansion',
+      args: "./ -o tree -n -f '**/{utils,lib}/index.d.ts'",
       hiddenArgs: '-r "./fs-hierarchy"',
       outputType: '',
     }),
     await createOutputMd({
-      name: 'negation',
+      name: 'glob negation',
       args: "./ -o tree -nf '!**/{lib,.git,node_modules}/**'",
       hiddenArgs: '-r "./fs-hierarchy"',
       outputType: '',

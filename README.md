@@ -503,10 +503,10 @@ $ fs-hierarchy ./src -o tree
 
 # Filtering
 <!-- filter -->
-## matching files
+## match files
  
 ```shell-script
-$ fs-hierarchy ./test --filter '*.json'
+$ fs-hierarchy ./src --filter 'index.ts'
 ```
 
 
@@ -515,7 +515,44 @@ $ fs-hierarchy ./test --filter '*.json'
   "name": "./src",
   "children": [
     {
-      "name": "tsconfig.json"
+      "name": "commands",
+      "children": [
+        {
+          "name": "index.ts"
+        }
+      ]
+    },
+    {
+      "name": "index.ts"
+    },
+    {
+      "name": "lib",
+      "children": [
+        {
+          "name": "format",
+          "children": [
+            {
+              "name": "index.ts"
+            }
+          ]
+        },
+        {
+          "name": "hierarchy",
+          "children": [
+            {
+              "name": "index.ts"
+            }
+          ]
+        },
+        {
+          "name": "write",
+          "children": [
+            {
+              "name": "index.ts"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
@@ -523,7 +560,7 @@ $ fs-hierarchy ./test --filter '*.json'
 ```
 
 
-## glob matching including empty nodes
+## match (including empty nodes)
  
 ```shell-script
 $ fs-hierarchy ./src -o tree -f '**/format/*'
@@ -549,7 +586,7 @@ $ fs-hierarchy ./src -o tree -f '**/format/*'
 ## filter empty nodes
  
 ```shell-script
-$ fs-hierarchy ./src -o tree -f '**/format/*' --no-empty
+$ fs-hierarchy ./src -o tree --no-empty -f '**/format/*'
 ```
 
 
@@ -566,7 +603,7 @@ $ fs-hierarchy ./src -o tree -f '**/format/*' --no-empty
 ```
 
 
-## pattern list
+## glob pattern list
  
 ```shell-script
 $ fs-hierarchy ./src -o tree -f '*@(e|x).ts'
@@ -592,39 +629,85 @@ $ fs-hierarchy ./src -o tree -f '*@(e|x).ts'
 ```
 
 
-## brace expansion
+## glob brace expansion
  
 ```shell-script
-$ fs-hierarchy ./ -o tree -f '**/{utils,docker}/**/*.d.ts' -n
+$ fs-hierarchy ./ -o tree -n -f '**/{utils,lib}/index.d.ts'
 ```
 
 
 ```
 ./fs-hierarchy
+ ├─ lib
+ │  ╰─ index.d.ts
  ╰─ node_modules
+    ├─ @microsoft
+    │  ├─ tsdoc
+    │  │  ╰─ lib
+    │  │     ╰─ index.d.ts
+    │  ╰─ tsdoc-config
+    │     ╰─ lib
+    │        ╰─ index.d.ts
     ├─ @nodelib
     │  ╰─ fs.scandir
     │     ╰─ out
     │        ╰─ utils
-    │           ├─ fs.d.ts
     │           ╰─ index.d.ts
-    ╰─ fast-glob
-       ╰─ out
-          ╰─ utils
-             ├─ array.d.ts
-             ├─ errno.d.ts
-             ├─ fs.d.ts
-             ├─ index.d.ts
-             ├─ path.d.ts
-             ├─ pattern.d.ts
-             ├─ stream.d.ts
-             ╰─ string.d.ts
+    ├─ @oclif
+    │  ├─ command
+    │  │  ╰─ lib
+    │  │     ╰─ index.d.ts
+    │  ├─ config
+    │  │  ╰─ lib
+    │  │     ╰─ index.d.ts
+    │  ├─ dev-cli
+    │  │  ├─ lib
+    │  │  │  ╰─ index.d.ts
+    │  │  ╰─ node_modules
+    │  │     ╰─ @oclif
+    │  │        ╰─ plugin-help
+    │  │           ╰─ lib
+    │  │              ╰─ index.d.ts
+    │  ├─ errors
+    │  │  ╰─ lib
+    │  │     ╰─ index.d.ts
+    │  ├─ parser
+    │  │  ╰─ lib
+    │  │     ╰─ index.d.ts
+    │  ├─ plugin-help
+    │  │  ╰─ lib
+    │  │     ╰─ index.d.ts
+    │  ╰─ test
+    │     ╰─ lib
+    │        ╰─ index.d.ts
+    ├─ cli-ux
+    │  ╰─ lib
+    │     ╰─ index.d.ts
+    ├─ eslint-plugin-tsdoc
+    │  ╰─ lib
+    │     ╰─ index.d.ts
+    ├─ fancy-test
+    │  ╰─ lib
+    │     ╰─ index.d.ts
+    ├─ fast-glob
+    │  ╰─ out
+    │     ╰─ utils
+    │        ╰─ index.d.ts
+    ├─ iconv-lite
+    │  ╰─ lib
+    │     ╰─ index.d.ts
+    ├─ qqjs
+    │  ╰─ lib
+    │     ╰─ index.d.ts
+    ╰─ stdout-stderr
+       ╰─ lib
+          ╰─ index.d.ts
 
 
 ```
 
 
-## negation
+## glob negation
  
 ```shell-script
 $ fs-hierarchy ./ -o tree -nf '!**/{lib,.git,node_modules}/**'
@@ -648,7 +731,8 @@ $ fs-hierarchy ./ -o tree -nf '!**/{lib,.git,node_modules}/**'
  │  ╰─ run.cmd
  ├─ docker
  │  ├─ Dockerfile
- │  ╰─ README.md
+ │  ├─ README.md
+ │  ╰─ publish_docker.sh
  ├─ oclif.manifest.json
  ├─ package-lock.json
  ├─ package.json

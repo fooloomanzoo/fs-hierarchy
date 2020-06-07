@@ -4,15 +4,15 @@
 
 ### Show help 
 ```sh-session
-$ sudo docker run fs-hierarchy --help
+$ sudo docker run fooloomanzoo/fs-hierarchy --help
 ```
 
 ### From current dir, Output to `stdout` 
 ```sh-session
-$ sudo docker run fs-hierarchy -v $PWD:/in
+$ sudo docker run -v $PWD:/in fooloomanzoo/fs-hierarchy
 ```
 
-### From `/home`, Input `~/Downloads`, Output to file `~/Documents/out.json`
+### From `~`, Input `~/Downloads`, Output to file `~/Documents/out.json`
 ```sh-session
-$ sudo docker run fs-hierarchy -v /home:/in ~/Documents:/out /in/Downloads out.json
+$ sudo docker run -v ~:/in -v ~/Documents:/out fooloomanzoo/fs-hierarchy /in/Downloads out.json
 ```
