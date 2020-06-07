@@ -31,7 +31,7 @@ $ npm install -g fs-hierarchy
 $ fs-hierarchy COMMAND
 running command...
 $ fs-hierarchy (-v|--version|version)
-fs-hierarchy/1.1.1 linux-x64 node-v12.18.0
+fs-hierarchy/1.1.2 linux-x64 node-v12.18.0
 $ fs-hierarchy --help [COMMAND]
 USAGE
   $ fs-hierarchy COMMAND
@@ -72,7 +72,7 @@ OPTIONS
   -v, --version                      show the version
 ```
 
-_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.1.1/src/commands/index.ts)_
+_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.1.2/src/commands/index.ts)_
 
 ## `fs-hierarchy help [COMMAND]`
 
