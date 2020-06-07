@@ -61,22 +61,16 @@ export = class FsHierarchyCLI extends Command {
       multiple: true,
       options: ['ext', 'path', 'stats', 'type'],
     }),
-    'filter': flags.boolean({
+    'filter': flags.string({
       char: 'f',
-      description: 'use to enable filtering',
-    }),
-    'match': flags.string({
-      char: 'm',
       description:
-        "specify the filter for node names (glob), negate by leading '!', depends on '--filter'",
+        "enable filtering for paths (glob), negate by leading '!', depends on '--filter'",
       parse: m => m.replace(/\\!/g, '!'),
       dependsOn: ['filter'],
     }),
     'no-empty': flags.boolean({
       char: 'n',
-      description:
-        "to filter child nodes that have no children, depends on '--filter'",
-      dependsOn: ['filter'],
+      description: 'to filter child nodes that have no children',
     }),
   };
 
@@ -123,7 +117,7 @@ export = class FsHierarchyCLI extends Command {
     const result = await FsHierarchyCLI.generateHierarchy(args.path, {
       filter: flags.filter
         ? {
-            ...(flags.match ? { match: flags.match } : {}),
+            ...(flags.filter ? { match: flags.filter } : {}),
             ...(flags['no-empty'] ? { noEmpty: Boolean(['no-empty']) } : {}),
           }
         : undefined,

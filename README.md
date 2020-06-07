@@ -57,14 +57,10 @@ ARGUMENTS
   OUTPUT  output filename
 
 OPTIONS
-  -f, --filter                       use to enable filtering
+  -f, --filter=filter                enable filtering for paths (glob), negate by leading '!', depends on '--filter'
   -h, --help                         show this help
   -i, --include=ext|path|stats|type  the included informations in return object
-
-  -m, --match=match                  specify the filter for node names (glob), negate by leading '!', depends on
-                                     '--filter'
-
-  -n, --no-empty                     to filter child nodes that have no children, depends on '--filter'
+  -n, --no-empty                     to filter child nodes that have no children
 
   -o, --format=json|tree|yaml        [default: json] used output format (overwritten if the the output path has a json-
                                      or yml/yaml-extension)
@@ -136,17 +132,17 @@ rootName | ☑ | string | give the root a name
 
 name | optional | type | description 
 --- | --- | --- | ---
-debug | ☑ | boolean ( `false` ) | Dump a ton of stuff to stderr.
-dot | ☑ | boolean ( `true` ) | Allow patterns to match filenames starting with a period, even if the pattern does not explicitly have a period in that spot.
-flipNegate | ☑ | boolean ( `false` ) | Returns from negate expressions the same as if they were not negated. (Ie, true on a hit, false on a miss.)
-matchBase | ☑ | boolean ( `true` ) | If set, then patterns without slashes will be matched against the basename of the path if it contains slashes.
-nobrace | ☑ | boolean ( `false` ) | Do not expand {a,b} and {1..3} brace sets.
-nocase | ☑ | boolean ( `false` ) | Perform a case-insensitive match.
-nocomment | ☑ | boolean ( `false` ) | Suppress the behavior of treating # at the start of a pattern as a comment.
-noext | ☑ | boolean ( `false` ) | Disable "extglob" style patterns like +(a|b).
-noglobstar | ☑ | boolean ( `false` ) | Disable ** matching against multiple folder names.
-nonegate | ☑ | boolean ( `false` ) | Suppress the behavior of treating a leading ! character as negation.
-nonull | ☑ | boolean ( `false` ) | When a match is not found by minimatch.match, return a list containing the pattern itself if this option is set. Otherwise, an empty list is returned if there are no matches.
+debug | ☑ | boolean (`false`) | Dump a ton of stuff to stderr.
+dot | ☑ | boolean (`true`) | Allow patterns to match filenames starting with a period, even if the pattern does not explicitly have a period in that spot.
+flipNegate | ☑ | boolean (`false`) | Returns from negate expressions the same as if they were not negated. (Ie, true on a hit, false on a miss.)
+matchBase | ☑ | boolean (`true`) | If set, then patterns without slashes will be matched against the basename of the path if it contains slashes.
+nobrace | ☑ | boolean (`false`) | Do not expand {a,b} and {1..3} brace sets.
+nocase | ☑ | boolean (`false`) | Perform a case-insensitive match.
+nocomment | ☑ | boolean (`false`) | Suppress the behavior of treating # at the start of a pattern as a comment.
+noext | ☑ | boolean (`false`) | Disable "extglob" style patterns like +(a|b).
+noglobstar | ☑ | boolean (`false`) | Disable ** matching against multiple folder names.
+nonegate | ☑ | boolean (`false`) | Suppress the behavior of treating a leading ! character as negation.
+nonull | ☑ | boolean (`false`) | When a match is not found by minimatch.match, return a list containing the pattern itself if this option is set. Otherwise, an empty list is returned if there are no matches.
 <!-- MinimatchOptionsstop -->
 # Structures
 
@@ -167,7 +163,7 @@ As a return (when using *json* or *yaml* as the output format) there are certain
 
 name | optional | type | description 
 --- | --- | --- | ---
-children | ☐ | array ( ``[]`` ) | children of the node
+children | ☐ | array (``[]``) | children of the node
 name | ☐ | string | the name of the entry (without the base path)
 path | ☑ | string | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
 stats | ☑ | [Stats](#Stats) | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
@@ -510,7 +506,7 @@ $ fs-hierarchy ./src -o tree
 ## matching files
  
 ```shell-script
-$ fs-hierarchy ./test -f --match '*.json'
+$ fs-hierarchy ./test --filter '*.json'
 ```
 
 
@@ -530,7 +526,7 @@ $ fs-hierarchy ./test -f --match '*.json'
 ## glob matching including empty nodes
  
 ```shell-script
-$ fs-hierarchy ./src -o tree -f --match '**/format/*'
+$ fs-hierarchy ./src -o tree -f '**/format/*'
 ```
 
 
@@ -550,10 +546,30 @@ $ fs-hierarchy ./src -o tree -f --match '**/format/*'
 ```
 
 
+## filter empty nodes
+ 
+```shell-script
+$ fs-hierarchy ./src -o tree -f '**/format/*' --no-empty
+```
+
+
+```
+./src
+ ╰─ lib
+    ╰─ format
+       ├─ index.ts
+       ├─ json.ts
+       ├─ tree.ts
+       ╰─ yaml.ts
+
+
+```
+
+
 ## pattern list
  
 ```shell-script
-$ fs-hierarchy ./src -o tree -f --match '*@(e|x).ts'
+$ fs-hierarchy ./src -o tree -f '*@(e|x).ts'
 ```
 
 
@@ -576,30 +592,10 @@ $ fs-hierarchy ./src -o tree -f --match '*@(e|x).ts'
 ```
 
 
-## filter empty nodes
- 
-```shell-script
-$ fs-hierarchy ./src -o tree -f --match '**/format/*' --no-empty
-```
-
-
-```
-./src
- ╰─ lib
-    ╰─ format
-       ├─ index.ts
-       ├─ json.ts
-       ├─ tree.ts
-       ╰─ yaml.ts
-
-
-```
-
-
 ## brace expansion
  
 ```shell-script
-$ fs-hierarchy ./ -o tree -f --match '**/{utils,docker}/**/*.d.ts' --no-empty
+$ fs-hierarchy ./ -o tree -f '**/{utils,docker}/**/*.d.ts' -n
 ```
 
 
@@ -631,7 +627,7 @@ $ fs-hierarchy ./ -o tree -f --match '**/{utils,docker}/**/*.d.ts' --no-empty
 ## negation
  
 ```shell-script
-$ fs-hierarchy ./ -o tree -f --match '!**/{lib,.git,node_modules}/**' --no-empty
+$ fs-hierarchy ./ -o tree -nf '!**/{lib,.git,node_modules}/**'
 ```
 
 

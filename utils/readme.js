@@ -55,7 +55,7 @@ function createSchemaTable(schema, title) {
   const createType = entry =>
     (entry.type &&
       entry.type +
-        (entry.default === undefined ? '' : ` ( \`${entry.default}\` )`)) ||
+        (entry.default === undefined ? '' : ` (\`${entry.default}\`)`)) ||
     (entry.$ref &&
       `[${entry.$ref.replace('#/definitions/', '')}](${entry.$ref.replace(
         '/definitions/',
@@ -127,34 +127,34 @@ async function main() {
   const filtering = [
     await createOutputMd({
       name: 'matching files',
-      args: "./test -f --match '*.json'",
+      args: "./test --filter '*.json'",
       outputType: '',
     }),
     await createOutputMd({
       name: 'glob matching including empty nodes',
-      args: "./src -o tree -f --match '**/format/*'",
-      outputType: '',
-    }),
-    await createOutputMd({
-      name: 'pattern list',
-      args: "./src -o tree -f --match '*@(e|x).ts'",
-      hiddenArgs: '-r "./src"',
+      args: "./src -o tree -f '**/format/*'",
       outputType: '',
     }),
     await createOutputMd({
       name: 'filter empty nodes',
-      args: "./src -o tree -f --match '**/format/*' --no-empty",
+      args: "./src -o tree -f '**/format/*' --no-empty",
+      outputType: '',
+    }),
+    await createOutputMd({
+      name: 'pattern list',
+      args: "./src -o tree -f '*@(e|x).ts'",
+      hiddenArgs: '-r "./src"',
       outputType: '',
     }),
     await createOutputMd({
       name: 'brace expansion',
-      args: "./ -o tree -f --match '**/{utils,docker}/**/*.d.ts' --no-empty",
+      args: "./ -o tree -f '**/{utils,docker}/**/*.d.ts' -n",
       hiddenArgs: '-r "./fs-hierarchy"',
       outputType: '',
     }),
     await createOutputMd({
       name: 'negation',
-      args: "./ -o tree -f --match '!**/{lib,.git,node_modules}/**' --no-empty",
+      args: "./ -o tree -nf '!**/{lib,.git,node_modules}/**'",
       hiddenArgs: '-r "./fs-hierarchy"',
       outputType: '',
     }),
