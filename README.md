@@ -12,9 +12,9 @@ Additionally it is possible:
 * follow symbolic links
 * output in json, yaml or in a tree (CLI only)
 
-[![Version](https://img.shields.io/npm/v/fs-hierarchy.svg)](https://npmjs.org/package/fs-hierarchy)
-[![Downloads/week](https://img.shields.io/npm/dw/fs-hierarchy.svg)](https://npmjs.org/package/fs-hierarchy)
-[![License](https://img.shields.io/npm/l/fs-hierarchy.svg)](https://github.com/fooloomanzoo/fs-hierarchy/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/fs-hierarchy.svg?style=for-the-badge)](https://npmjs.org/package/fs-hierarchy)
+[![Downloads/week](https://img.shields.io/npm/dw/fs-hierarchy.svg?style=for-the-badge)](https://npmjs.org/package/fs-hierarchy)
+[![License](https://img.shields.io/npm/l/fs-hierarchy.svg?style=for-the-badge)](https://github.com/fooloomanzoo/fs-hierarchy/blob/master/package.json)
 
 <!-- toc -->
 * [Command line](#command-line)
