@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { IMinimatch } from 'minimatch';
 import type { Node, Options } from '../../types';
 import {
   leafFactory,
@@ -22,6 +23,7 @@ export const readdirRecursive = (
   pathname: string,
   hierarchy: Node,
   options: Options,
+  minimatcher?: IMinimatch,
   rootPath: string = pathname,
 ): Node | null => {
   const node = fs
@@ -30,26 +32,11 @@ export const readdirRecursive = (
       const type = resolveType(entry);
       const resolvedPath = path.resolve(pathname, entry.name);
 
-      // optionally apply filter to the absolute path of the child
-      if (
-        options?.filter &&
-        (options.inverse
-          ? resolvedPath.match(options.filter)
-          : !resolvedPath.match(options.filter))
-      ) {
-        return result;
-      }
-
       if (
         shouldTreatAsLeaf(resolvedPath, type, options.followSymlinks, rootPath)
       ) {
-        // optionally apply filter to the name of a leaf
-        if (
-          options?.leafFilter &&
-          (options.inverse
-            ? entry.name.match(options.leafFilter)
-            : !entry.name.match(options.leafFilter))
-        ) {
+        // optionally apply filter to the path of a leaf
+        if (minimatcher && !minimatcher.match(resolvedPath)) {
           return result;
         }
 
@@ -57,20 +44,11 @@ export const readdirRecursive = (
           leafFactory(entry.name, resolvedPath, type, options.include),
         );
       } else {
-        // optionally apply filter to the name of a node
-        if (
-          options?.nodeFilter &&
-          (options.inverse
-            ? entry.name.match(options.nodeFilter)
-            : !entry.name.match(options.nodeFilter))
-        ) {
-          return result;
-        }
-
         const child = readdirRecursive(
           resolvedPath,
           nodeFactory(entry.name, resolvedPath, type, options.include),
           options,
+          minimatcher,
           rootPath,
         );
         if (child) {
@@ -82,8 +60,9 @@ export const readdirRecursive = (
     }, hierarchy);
 
   // optionally return **null** if there are no children
-  if (options?.noEmptyChildNodes && node.children.length === 0) {
+  if (options?.filter?.noEmpty && node.children.length === 0) {
     return null;
   }
+
   return node;
 };

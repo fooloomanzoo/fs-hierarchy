@@ -1,6 +1,9 @@
+import type { Hierarchy, Options } from '../../types';
+
 import { lstatSync } from 'fs';
 import { resolve } from 'path';
-import type { Hierarchy, Options } from '../../types';
+import { Minimatch, IOptions } from 'minimatch';
+
 import { readdirRecursive } from './read-dir';
 import {
   resolveType,
@@ -20,23 +23,31 @@ import {
 export function hierarchy(
   root: string,
   options: Options = {
-    inverse: false,
-    filter: undefined,
+    filter: {},
     followSymlinks: false,
-    leafFilter: undefined,
-    nodeFilter: undefined,
-    noEmptyChildNodes: false,
-    rootName: resolve(root),
     include: {
       withPath: false,
       withType: false,
       withStats: false,
       withExtension: false,
     },
+    rootName: resolve(root),
   },
 ): Hierarchy {
   const resolvedPath = resolve(root);
   const type = resolveType(lstatSync(resolvedPath));
+
+  /** default minimatch options */
+  const minimatchOptions: IOptions = {
+    dot: true,
+    matchBase: true,
+    ...options?.filter?.options,
+  };
+  /** create minimatch resolver */
+  const minimatcher =
+    (options?.filter?.match &&
+      new Minimatch(options.filter.match, minimatchOptions)) ||
+    undefined;
 
   if (shouldTreatAsLeaf(resolvedPath, type, options?.followSymlinks)) {
     return leafFactory(
@@ -54,5 +65,5 @@ export function hierarchy(
     options.include,
   );
 
-  return readdirRecursive(resolvedPath, node, options) || node;
+  return readdirRecursive(resolvedPath, node, options, minimatcher) || node;
 }

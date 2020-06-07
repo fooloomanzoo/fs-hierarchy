@@ -5,7 +5,6 @@ import { flags } from '@oclif/command';
 import cli from 'cli-ux';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as globToRegExp from 'glob-to-regexp';
 
 import { hierarchy } from '../lib/hierarchy';
 import { toJSON, toTree, toYAML } from '../lib/format';
@@ -48,7 +47,7 @@ export = class FsHierarchyCLI extends Command {
       options: ['json', 'tree', 'yaml'],
     }),
     'root-name': flags.string({
-      char: 'n',
+      char: 'r',
       description: 'the used name for the root-folder',
     }),
     'follow-symlinks': flags.boolean({
@@ -62,28 +61,22 @@ export = class FsHierarchyCLI extends Command {
       multiple: true,
       options: ['ext', 'path', 'stats', 'type'],
     }),
-    'use-filter': flags.boolean({
+    'filter': flags.boolean({
       char: 'f',
       description: 'use to enable filtering',
     }),
-    'filter': flags.string({
-      description: 'the filter for all absolute path names (glob)',
-      dependsOn: ['use-filter'],
+    'match': flags.string({
+      char: 'm',
+      description:
+        "specify the filter for node names (glob), negate by leading '!', depends on '--filter'",
+      parse: m => m.replace(/\\!/g, '!'),
+      dependsOn: ['filter'],
     }),
-    'leaf': flags.string({
-      description: 'specify the filter for leaf names (glob)',
-      dependsOn: ['use-filter'],
-    }),
-    'node': flags.string({
-      description: 'specify the filter for node names (glob)',
-      dependsOn: ['use-filter'],
-    }),
-    'inverse': flags.boolean({
-      description: 'inverse the filters',
-      dependsOn: ['use-filter'],
-    }),
-    'no-empty-nodes': flags.boolean({
-      description: 'to filter child nodes that have no children',
+    'no-empty': flags.boolean({
+      char: 'n',
+      description:
+        "to filter child nodes that have no children, depends on '--filter'",
+      dependsOn: ['filter'],
     }),
   };
 
@@ -128,23 +121,24 @@ export = class FsHierarchyCLI extends Command {
     cli.action.start('create hierarchy');
 
     const result = await FsHierarchyCLI.generateHierarchy(args.path, {
+      filter: flags.filter
+        ? {
+            ...(flags.match ? { match: flags.match } : {}),
+            ...(flags['no-empty'] ? { noEmpty: Boolean(['no-empty']) } : {}),
+          }
+        : undefined,
+      followSymlinks: flags['follow-symlinks'],
       include: {
         withExtension: flags.include?.includes('ext'),
         withPath: flags.include?.includes('path'),
         withStats: flags.include?.includes('stats'),
         withType: flags.include?.includes('type'),
       },
-      inverse: flags.inverse,
-      filter: flags.filter ? globToRegExp(flags.filter) : undefined,
-      followSymlinks: flags['follow-symlinks'],
-      leafFilter: flags.leaf ? globToRegExp(flags.leaf) : undefined,
-      nodeFilter: flags.node ? globToRegExp(flags.node) : undefined,
-      noEmptyChildNodes: flags['no-empty-nodes'],
       rootName: flags['root-name'],
     });
     cli.action.stop();
 
-    cli.action.start('write results');
+    cli.action.start('output results');
     writer(formatter(result));
     cli.action.stop();
   }

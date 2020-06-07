@@ -13,9 +13,16 @@ export const toTree = (h: Hierarchy, indention = '') => {
   if (isNode(h)) {
     for (let i = 0; i < h.children.length; i++) {
       const isLastChild = i === h.children.length - 1;
+      const child = h.children[i];
 
       tree += indention;
-      tree += isLastChild ? ' ╰─ ' : ' ├─ ';
+      tree += isLastChild ? ' ╰' : ' ├';
+
+      if (isNode(child) && child.children.length === 0) {
+        tree += '╌ ';
+      } else {
+        tree += '─ ';
+      }
 
       tree += toTree(h.children[i], indention + (isLastChild ? '   ' : ' │ '));
     }

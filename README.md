@@ -20,7 +20,8 @@ Additionally it is possible:
 * [Command line](#command-line)
 * [Programmatic use](#programmatic-use)
 * [Structures](#structures)
-* [Examples](#examples)
+* [Output](#output)
+* [Filtering](#filtering)
 <!-- tocstop -->
   
 # Command line
@@ -56,27 +57,23 @@ ARGUMENTS
   OUTPUT  output filename
 
 OPTIONS
-  -f, --use-filter                   use to enable filtering
+  -f, --filter                       use to enable filtering
   -h, --help                         show this help
   -i, --include=ext|path|stats|type  the included informations in return object
-  -n, --root-name=root-name          the used name for the root-folder
+
+  -m, --match=match                  specify the filter for node names (glob), negate by leading '!', depends on
+                                     '--filter'
+
+  -n, --no-empty                     to filter child nodes that have no children, depends on '--filter'
 
   -o, --format=json|tree|yaml        [default: json] used output format (overwritten if the the output path has a json-
                                      or yml/yaml-extension)
 
+  -r, --root-name=root-name          the used name for the root-folder
+
   -s, --follow-symlinks              follow symbolic links
 
   -v, --version                      show the version
-
-  --filter=filter                    the filter for all absolute path names (glob)
-
-  --inverse                          inverse the filters
-
-  --leaf=leaf                        specify the filter for leaf names (glob)
-
-  --no-empty-nodes                   to filter child nodes that have no children
-
-  --node=node                        specify the filter for node names (glob)
 ```
 
 _See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.0.5/src/commands/index.ts)_
@@ -118,22 +115,39 @@ const myfiles = generateHierarchy(root, options);
 Use the options if want to filter the resulting [hierarchy](#Hierarchy) object or want to include extra informations.
 
 
-name | optional | type | description
+name | optional | type | description 
 --- | --- | --- | ---
-filter | ☑ | [RegExp](#RegExp), string | filter for the absolute paths of the found [Leaf](#Leaf)s or the [Node](#Node)s
+filter | ☑ | object | use glob filter for the found [Leaf](#Leaf)s or the [Node](#Node)s. [minimatch](https://github.com/isaacs/minimatch) is used, have a look at the [differences](https://github.com/isaacs/minimatch#comparisons-to-other-fnmatchglob-implementations)
+*filter*.match | ☑ | string | glob filter for the absolute path of the found [Node](#Node)s (negate by leading **!**)
+*filter*.noEmpty | ☑ | boolean | if true and a [Node](#Node) has no children, the node will be not returned
+*filter*.options | ☑ | [MinimatchOptions](#MinimatchOptions) | [minimatch options](https://github.com/isaacs/minimatch#options) for filtering
 followSymlinks | ☑ | boolean | if true and there is a symlink, it can be tried to follow the link and determine its children if it is a node
 include | ☑ | object | included in the return object
 *include*.withExtension | ☑ | boolean | if *true*, include the [extension](https://nodejs.org/api/path.html#path_path_extname_path) in return object (only for [Leaf](#Leaf)s)
 *include*.withPath | ☑ | boolean | if *true*, include the absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths) in return object
 *include*.withStats | ☑ | boolean | if *true*, include [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats) in return object
 *include*.withType | ☑ | boolean | if *true*, include [type](#Types) in return object
-inverse | ☑ | boolean | inverse results for *filter*, *leafFilter* and *nodeFilter*
-leafFilter | ☑ | [RegExp](#RegExp), string | filter for the name of the found [Leaf](#Leaf)s
-noEmptyChildNodes | ☑ | boolean | if true, [Node](#Node)s with no children won't be returned (except for the root-node)
-nodeFilter | ☑ | [RegExp](#RegExp), string | filter for the name of the found [Node](#Node)s
 rootName | ☑ | string | give the root a name
 <!-- Optionsstop -->
+<!-- MinimatchOptions -->
+## MinimatchOptions
+[minimatch options](https://github.com/isaacs/minimatch#options) for filtering
 
+
+name | optional | type | description 
+--- | --- | --- | ---
+debug | ☑ | boolean ( `false` ) | Dump a ton of stuff to stderr.
+dot | ☑ | boolean ( `true` ) | Allow patterns to match filenames starting with a period, even if the pattern does not explicitly have a period in that spot.
+flipNegate | ☑ | boolean ( `false` ) | Returns from negate expressions the same as if they were not negated. (Ie, true on a hit, false on a miss.)
+matchBase | ☑ | boolean ( `true` ) | If set, then patterns without slashes will be matched against the basename of the path if it contains slashes.
+nobrace | ☑ | boolean ( `false` ) | Do not expand {a,b} and {1..3} brace sets.
+nocase | ☑ | boolean ( `false` ) | Perform a case-insensitive match.
+nocomment | ☑ | boolean ( `false` ) | Suppress the behavior of treating # at the start of a pattern as a comment.
+noext | ☑ | boolean ( `false` ) | Disable "extglob" style patterns like +(a|b).
+noglobstar | ☑ | boolean ( `false` ) | Disable ** matching against multiple folder names.
+nonegate | ☑ | boolean ( `false` ) | Suppress the behavior of treating a leading ! character as negation.
+nonull | ☑ | boolean ( `false` ) | When a match is not found by minimatch.match, return a list containing the pattern itself if this option is set. Otherwise, an empty list is returned if there are no matches.
+<!-- MinimatchOptionsstop -->
 # Structures
 
 As a return (when using *json* or *yaml* as the output format) there are certain properties available by default. Optional it is possible to include some extra properties.
@@ -151,9 +165,9 @@ As a return (when using *json* or *yaml* as the output format) there are certain
 **Node**-structure of the hierarchy map
 
 
-name | optional | type | description
+name | optional | type | description 
 --- | --- | --- | ---
-children | ☐ | array | children of the node
+children | ☐ | array ( ``[]`` ) | children of the node
 name | ☐ | string | the name of the entry (without the base path)
 path | ☑ | string | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
 stats | ☑ | [Stats](#Stats) | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
@@ -165,7 +179,7 @@ type | ☑ | [Types](#Types) | optionally included [type](#Types) in the filesys
 **Leaf**-structure of the hierarchy map
 
 
-name | optional | type | description
+name | optional | type | description 
 --- | --- | --- | ---
 extension | ☑ | string | optionally included [extension](https://nodejs.org/api/path.html#path_path_extname_path) (only for [Leaf](#Leaf)s)
 name | ☐ | string | the name of the entry (without the base path)
@@ -187,13 +201,12 @@ Types of a [Leaf](#Leaf) or [Node](#Node) entry
 * `symlink`
 
 <!-- Typesstop -->
-
 <!-- Stats -->
 ## Stats
 
 
 
-name | optional | type | description
+name | optional | type | description 
 --- | --- | --- | ---
 atime | ☐ | string | Enables basic storage and retrieval of dates and times.
 atimeMs | ☐ | number | ─
@@ -216,8 +229,8 @@ uid | ☐ | number | ─
 <!-- Statsstop -->
 
 
-# Examples
-<!-- examples -->
+# Output
+<!-- output -->
 ## JSON
  
 ```shell-script
@@ -325,11 +338,11 @@ $ fs-hierarchy ./test -i ext path type stats
     "ino": 2500760,
     "size": 4096,
     "blocks": 8,
-    "atimeMs": 1591390047369.5208,
+    "atimeMs": 1591515507954.0964,
     "mtimeMs": 1590655938999.0305,
     "ctimeMs": 1590655938999.0305,
     "birthtimeMs": 1590655929458.9397,
-    "atime": "2020-06-05T20:47:27.370Z",
+    "atime": "2020-06-07T07:38:27.954Z",
     "mtime": "2020-05-28T08:52:18.999Z",
     "ctime": "2020-05-28T08:52:18.999Z",
     "birthtime": "2020-05-28T08:52:09.459Z"
@@ -351,11 +364,11 @@ $ fs-hierarchy ./test -i ext path type stats
         "ino": 2500771,
         "size": 426,
         "blocks": 8,
-        "atimeMs": 1591282346055.544,
+        "atimeMs": 1591517214816.851,
         "mtimeMs": 1590706118297.9292,
         "ctimeMs": 1590706118297.9292,
         "birthtimeMs": 1590655938999.0305,
-        "atime": "2020-06-04T14:52:26.056Z",
+        "atime": "2020-06-07T08:06:54.817Z",
         "mtime": "2020-05-28T22:48:38.298Z",
         "ctime": "2020-05-28T22:48:38.298Z",
         "birthtime": "2020-05-28T08:52:18.999Z"
@@ -377,11 +390,11 @@ $ fs-hierarchy ./test -i ext path type stats
         "ino": 2500764,
         "size": 92,
         "blocks": 8,
-        "atimeMs": 1591108845893.1775,
+        "atimeMs": 1591517214816.851,
         "mtimeMs": 1590655929458.9397,
         "ctimeMs": 1590655929458.9397,
         "birthtimeMs": 1590655929458.9397,
-        "atime": "2020-06-02T14:40:45.893Z",
+        "atime": "2020-06-07T08:06:54.817Z",
         "mtime": "2020-05-28T08:52:09.459Z",
         "ctime": "2020-05-28T08:52:09.459Z",
         "birthtime": "2020-05-28T08:52:09.459Z"
@@ -403,11 +416,11 @@ $ fs-hierarchy ./test -i ext path type stats
         "ino": 2500761,
         "size": 120,
         "blocks": 8,
-        "atimeMs": 1591108845897.1775,
+        "atimeMs": 1591517214816.851,
         "mtimeMs": 1590655929458.9397,
         "ctimeMs": 1590655929458.9397,
         "birthtimeMs": 1590655929458.9397,
-        "atime": "2020-06-02T14:40:45.897Z",
+        "atime": "2020-06-07T08:06:54.817Z",
         "mtime": "2020-05-28T08:52:09.459Z",
         "ctime": "2020-05-28T08:52:09.459Z",
         "birthtime": "2020-05-28T08:52:09.459Z"
@@ -491,3 +504,173 @@ $ fs-hierarchy ./src -o tree
 
 
 <!-- examplesstop -->
+
+# Filtering
+<!-- filter -->
+## matching files
+ 
+```shell-script
+$ fs-hierarchy ./test -f --match '*.json'
+```
+
+
+```
+{
+  "name": "./src",
+  "children": [
+    {
+      "name": "tsconfig.json"
+    }
+  ]
+}
+
+```
+
+
+## glob matching including empty nodes
+ 
+```shell-script
+$ fs-hierarchy ./src -o tree -f --match '**/format/*'
+```
+
+
+```
+./src
+ ├╌ commands
+ ╰─ lib
+    ├─ format
+    │  ├─ index.ts
+    │  ├─ json.ts
+    │  ├─ tree.ts
+    │  ╰─ yaml.ts
+    ├╌ hierarchy
+    ╰╌ write
+
+
+```
+
+
+## pattern list
+ 
+```shell-script
+$ fs-hierarchy ./src -o tree -f --match '*@(e|x).ts'
+```
+
+
+```
+./src
+ ├─ commands
+ │  ╰─ index.ts
+ ├─ index.ts
+ ╰─ lib
+    ├─ format
+    │  ├─ index.ts
+    │  ╰─ tree.ts
+    ├─ hierarchy
+    │  ╰─ index.ts
+    ╰─ write
+       ├─ file.ts
+       ╰─ index.ts
+
+
+```
+
+
+## filter empty nodes
+ 
+```shell-script
+$ fs-hierarchy ./src -o tree -f --match '**/format/*' --no-empty
+```
+
+
+```
+./src
+ ╰─ lib
+    ╰─ format
+       ├─ index.ts
+       ├─ json.ts
+       ├─ tree.ts
+       ╰─ yaml.ts
+
+
+```
+
+
+## brace expansion
+ 
+```shell-script
+$ fs-hierarchy ./ -o tree -f --match '**/{utils,docker}/**/*.d.ts' --no-empty
+```
+
+
+```
+./fs-hierarchy
+ ╰─ node_modules
+    ├─ @nodelib
+    │  ╰─ fs.scandir
+    │     ╰─ out
+    │        ╰─ utils
+    │           ├─ fs.d.ts
+    │           ╰─ index.d.ts
+    ╰─ fast-glob
+       ╰─ out
+          ╰─ utils
+             ├─ array.d.ts
+             ├─ errno.d.ts
+             ├─ fs.d.ts
+             ├─ index.d.ts
+             ├─ path.d.ts
+             ├─ pattern.d.ts
+             ├─ stream.d.ts
+             ╰─ string.d.ts
+
+
+```
+
+
+## negation
+ 
+```shell-script
+$ fs-hierarchy ./ -o tree -f --match '!**/{lib,.git,node_modules}/**' --no-empty
+```
+
+
+```
+./fs-hierarchy
+ ├─ .editorconfig
+ ├─ .eslintignore
+ ├─ .eslintrc
+ ├─ .gitattributes
+ ├─ .gitignore
+ ├─ .prettierrc
+ ├─ .vscode
+ │  ╰─ settings.json
+ ├─ LICENSE
+ ├─ README.md
+ ├─ bin
+ │  ├─ run
+ │  ╰─ run.cmd
+ ├─ docker
+ │  ├─ Dockerfile
+ │  ╰─ README.md
+ ├─ oclif.manifest.json
+ ├─ package-lock.json
+ ├─ package.json
+ ├─ src
+ │  ├─ commands
+ │  │  ╰─ index.ts
+ │  ├─ index.ts
+ │  ╰─ types.ts
+ ├─ test
+ │  ├─ index.test.ts
+ │  ├─ mocha.opts
+ │  ╰─ tsconfig.json
+ ├─ tsconfig.json
+ ╰─ utils
+    ╰─ readme.js
+
+
+```
+
+
+<!-- filterstop -->

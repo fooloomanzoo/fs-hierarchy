@@ -24,7 +24,7 @@ function replaceTag(source, tag, body) {
 async function createOutputMd({
   name,
   args = './src',
-  hiddenArgs = '-n "./src" ',
+  hiddenArgs = '-r "./src" ',
   outputType = 'json',
 }) {
   const { stdout } = await exec('./bin/run ' + args + ' ' + hiddenArgs, {
@@ -53,7 +53,9 @@ async function createSchema() {
 
 function createSchemaTable(schema, title) {
   const createType = entry =>
-    entry.type ||
+    (entry.type &&
+      entry.type +
+        (entry.default === undefined ? '' : ` ( \`${entry.default}\` )`)) ||
     (entry.$ref &&
       `[${entry.$ref.replace('#/definitions/', '')}](${entry.$ref.replace(
         '/definitions/',
@@ -64,7 +66,7 @@ function createSchemaTable(schema, title) {
   const createEntry = (key, entry, required) => {
     let row = `${key} | ${required ? '☐' : '☑'} | ${
       createType(entry) || createAnyOf(entry.anyOf) || '─'
-    } | ${entry.description || '─'}`;
+    } | ${(entry.description || '').replace(/\s/g, ' ') || '─'}`;
     if (entry.properties) {
       // eslint-disable-next-line guard-for-in
       for (const p in entry.properties) {
@@ -80,7 +82,7 @@ ${schema.anyOf ? createAnyOf(schema.anyOf) : ''}
 ${schema.enum ? schema.enum.map(e => `* \`${e}\``).join('\n') : ''}
 ${
   schema.properties
-    ? `name | optional | type | description
+    ? `name | optional | type | description 
 --- | --- | --- | ---
 ${Object.entries(schema.properties)
   .map(([key, entry]) =>
@@ -107,7 +109,7 @@ async function main() {
     await createOutputMd({
       name: 'with extension, path, type & stats',
       args: './test -i ext path type stats',
-      hiddenArgs: '-n "./test"',
+      hiddenArgs: '-r "./test"',
       outputType: 'json',
     }),
     await createOutputMd({
@@ -122,9 +124,46 @@ async function main() {
     }),
   ].join('\n');
 
+  const filtering = [
+    await createOutputMd({
+      name: 'matching files',
+      args: "./test -f --match '*.json'",
+      outputType: '',
+    }),
+    await createOutputMd({
+      name: 'glob matching including empty nodes',
+      args: "./src -o tree -f --match '**/format/*'",
+      outputType: '',
+    }),
+    await createOutputMd({
+      name: 'pattern list',
+      args: "./src -o tree -f --match '*@(e|x).ts'",
+      hiddenArgs: '-r "./src"',
+      outputType: '',
+    }),
+    await createOutputMd({
+      name: 'filter empty nodes',
+      args: "./src -o tree -f --match '**/format/*' --no-empty",
+      outputType: '',
+    }),
+    await createOutputMd({
+      name: 'brace expansion',
+      args: "./ -o tree -f --match '**/{utils,docker}/**/*.d.ts' --no-empty",
+      hiddenArgs: '-r "./fs-hierarchy"',
+      outputType: '',
+    }),
+    await createOutputMd({
+      name: 'negation',
+      args: "./ -o tree -f --match '!**/{lib,.git,node_modules}/**' --no-empty",
+      hiddenArgs: '-r "./fs-hierarchy"',
+      outputType: '',
+    }),
+  ].join('\n');
+
   let content = (await fs.readFile(README)).toString();
 
   content = replaceTag(content, 'examples', outputs);
+  content = replaceTag(content, 'filter', filtering);
 
   // eslint-disable-next-line guard-for-in
   for (const key in schema.definitions) {

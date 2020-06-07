@@ -1,4 +1,5 @@
 import type { Stats } from 'fs';
+import * as minimatch from 'minimatch';
 
 /** Types of a [Leaf](#Leaf) or [Node](#Node) entry */
 export type Types =
@@ -27,15 +28,37 @@ export interface Leaf {
 
 /** **Node**-structure of the hierarchy map */
 export interface Node extends Omit<Leaf, 'extension'> {
-  /** children of the node */
+  /**
+   * children of the node
+   * @default `[]`
+   * */
   children: Array<Node | Leaf>;
 }
 
 /** The hierarchy map that will be returned. It can either be a [Leaf](#Leaf) or a [Node](#Node) */
 export type Hierarchy = Node | Leaf;
 
-/** Use the options if want to filter the resulting [hierarchy](#Hierarchy) object or want to include extra informations.*/
+/** [minimatch options](https://github.com/isaacs/minimatch#options) for filtering */
+export interface MinimatchOptions extends minimatch.IOptions {
+  /** @default true */
+  dot?: boolean;
+  /** @default true */
+  matchBase?: boolean;
+}
+
+/** Use the options if want to filter the resulting [hierarchy](#Hierarchy) object or want to include extra informations. */
 export interface Options {
+  /** use glob filter for the found [Leaf](#Leaf)s or the [Node](#Node)s. [minimatch](https://github.com/isaacs/minimatch) is used, have a look at the [differences](https://github.com/isaacs/minimatch#comparisons-to-other-fnmatchglob-implementations) */
+  filter?: {
+    /** glob filter for the absolute path of the found [Node](#Node)s (negate by leading **!**) */
+    match?: string;
+    /** [minimatch options](https://github.com/isaacs/minimatch#options) for filtering */
+    options?: MinimatchOptions;
+    /** if true and a [Node](#Node) has no children, the node will be not returned */
+    noEmpty?: boolean;
+  };
+  /** if true and there is a symlink, it can be tried to follow the link and determine its children if it is a node */
+  followSymlinks?: boolean;
   /** included in the return object */
   include?: {
     /** if *true*, include the absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths) in return object */
@@ -47,18 +70,6 @@ export interface Options {
     /** if *true*, include the [extension](https://nodejs.org/api/path.html#path_path_extname_path) in return object (only for [Leaf](#Leaf)s) */
     withExtension?: boolean;
   };
-  /** inverse results for *filter*, *leafFilter* and *nodeFilter* */
-  inverse?: boolean;
-  /** filter for the absolute paths of the found [Leaf](#Leaf)s or the [Node](#Node)s */
-  filter?: string | RegExp;
-  /** if true and there is a symlink, it can be tried to follow the link and determine its children if it is a node */
-  followSymlinks?: boolean;
-  /** filter for the name of the found [Leaf](#Leaf)s */
-  leafFilter?: string | RegExp;
-  /** filter for the name of the found [Node](#Node)s */
-  nodeFilter?: string | RegExp;
-  /** if true, [Node](#Node)s with no children won't be returned (except for the root-node) */
-  noEmptyChildNodes?: boolean;
   /** give the root a name */
   rootName?: string;
 }
