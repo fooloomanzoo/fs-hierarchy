@@ -17,7 +17,7 @@ import {
  * @param options -   the given options
  * @param rootPath -  the path to the given root (set by default at the first iteration)
  *
- * @returns the **Node**-structure or null (if optional *noEmptyChildNodes* is set to true and there are no children)
+ * @returns the **Node**-structure or null (if optional *noEmpty* is set to true and there are no children)
  */
 export const readdirRecursive = (
   pathname: string,
