@@ -9,5 +9,5 @@ $ sudo docker run fs-hierarchy -v $PWD:/in
 
 * Mount `/home`, Input `~/Downloads`, Output to file `~/Documents/out.json`
 ```sh-session
-$ sudo docker run fs-hierarchy -v /home:/in ~/Documents:/out ./Downloads out.json
+$ sudo docker run fs-hierarchy -v /home:/in ~/Documents:/out /in/Downloads out.json
 ```
