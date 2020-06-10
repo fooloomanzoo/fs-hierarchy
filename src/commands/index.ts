@@ -63,8 +63,7 @@ export = class FsHierarchyCLI extends Command {
     }),
     'filter': flags.string({
       char: 'f',
-      description:
-        "enable filtering for paths (glob), negate by leading '!', depends on '--filter'",
+      description: "enable filtering for paths (glob), negate by leading '!'",
       parse: m => m.replace(/\\!/g, '!'),
       dependsOn: ['filter'],
     }),

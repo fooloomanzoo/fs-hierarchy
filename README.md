@@ -57,7 +57,7 @@ ARGUMENTS
   OUTPUT  output filename
 
 OPTIONS
-  -f, --filter=filter                enable filtering for paths (glob), negate by leading '!', depends on '--filter'
+  -f, --filter=filter                enable filtering for paths (glob), negate by leading '!'
   -h, --help                         show this help
   -i, --include=ext|path|stats|type  the included informations in return object
   -n, --no-empty                     to filter child nodes that have no children
@@ -731,8 +731,7 @@ $ fs-hierarchy ./ -o tree -nf '!**/{lib,.git,node_modules}/**'
  │  ╰─ run.cmd
  ├─ docker
  │  ├─ Dockerfile
- │  ├─ README.md
- │  ╰─ publish_docker.sh
+ │  ╰─ README.md
  ├─ oclif.manifest.json
  ├─ package-lock.json
  ├─ package.json
