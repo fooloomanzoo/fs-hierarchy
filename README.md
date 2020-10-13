@@ -31,7 +31,7 @@ $ npm install -g fs-hierarchy
 $ fs-hierarchy COMMAND
 running command...
 $ fs-hierarchy (-v|--version|version)
-fs-hierarchy/1.1.3 linux-x64 node-v12.18.0
+fs-hierarchy/1.1.3 linux-x64 node-v14.13.1
 $ fs-hierarchy --help [COMMAND]
 USAGE
   $ fs-hierarchy COMMAND
@@ -89,7 +89,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 <!-- commandsstop -->
 
 # Programmatic use
@@ -680,6 +680,11 @@ $ fs-hierarchy ./ -o tree -n -f '**/{utils,lib}/index.d.ts'
     │  ╰─ test
     │     ╰─ lib
     │        ╰─ index.d.ts
+    ├─ @typescript-eslint
+    │  ╰─ scope-manager
+    │     ╰─ dist
+    │        ╰─ lib
+    │           ╰─ index.d.ts
     ├─ cli-ux
     │  ╰─ lib
     │     ╰─ index.d.ts
@@ -693,7 +698,7 @@ $ fs-hierarchy ./ -o tree -n -f '**/{utils,lib}/index.d.ts'
     │  ╰─ out
     │     ╰─ utils
     │        ╰─ index.d.ts
-    ├─ iconv-lite
+    ├─ mock-stdin
     │  ╰─ lib
     │     ╰─ index.d.ts
     ├─ qqjs
