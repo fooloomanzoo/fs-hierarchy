@@ -10,7 +10,7 @@ Additionally it is possible:
 * to include extra informations like the file extension, the absolute path, the type and [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
 * filter paths and names
 * follow symbolic links
-* output in json, yaml or in a tree (CLI only)
+* in CLI: output in json, yaml or in a tree to stdout or file
 
 [![Version](https://img.shields.io/npm/v/fs-hierarchy.svg?style=for-the-badge)](https://npmjs.org/package/fs-hierarchy)
 [![Downloads/week](https://img.shields.io/npm/dw/fs-hierarchy.svg?style=for-the-badge)](https://npmjs.org/package/fs-hierarchy)
