@@ -1,5 +1,6 @@
 FROM node:10-alpine
 
+ENV NPM_ENV=production
 ENV NPM_CONFIG_PREFIX=/usr/node/.npm-global
 
 RUN npm i -g fs-hierarchy
