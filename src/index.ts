@@ -1,3 +1,3 @@
-import cli = require('./commands');
+import hierarchy = require('./lib/hierarchy');
 
-export = cli;
+export = hierarchy;

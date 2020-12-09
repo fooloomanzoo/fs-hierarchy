@@ -31,7 +31,7 @@ $ npm install -g fs-hierarchy
 $ fs-hierarchy COMMAND
 running command...
 $ fs-hierarchy (-v|--version|version)
-fs-hierarchy/1.2.0 linux-x64 node-v14.13.1
+fs-hierarchy/1.2.0 linux-x64 node-v14.15.1
 $ fs-hierarchy --help [COMMAND]
 USAGE
   $ fs-hierarchy COMMAND
@@ -741,6 +741,7 @@ $ fs-hierarchy ./ -o tree -nf '!**/{lib,.git,node_modules}/**'
  ├─ package-lock.json
  ├─ package.json
  ├─ src
+ │  ├─ cli.ts
  │  ├─ commands
  │  │  ╰─ index.ts
  │  ├─ index.ts
