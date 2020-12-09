@@ -17,8 +17,8 @@ Additionally it is possible:
 [![License](https://img.shields.io/npm/l/fs-hierarchy.svg?style=for-the-badge)](https://github.com/fooloomanzoo/fs-hierarchy/blob/master/package.json)
 
 <!-- toc -->
-* [Command line](#command-line)
 * [Programmatic use](#programmatic-use)
+* [Command line](#command-line)
 * [Structures](#structures)
 * [Output](#output)
 * [Filtering](#filtering)
