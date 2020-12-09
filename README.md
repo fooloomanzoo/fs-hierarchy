@@ -31,7 +31,7 @@ $ npm install -g fs-hierarchy
 $ fs-hierarchy COMMAND
 running command...
 $ fs-hierarchy (-v|--version|version)
-fs-hierarchy/1.2.0 linux-x64 node-v14.15.1
+fs-hierarchy/1.2.1 linux-x64 node-v14.15.1
 $ fs-hierarchy --help [COMMAND]
 USAGE
   $ fs-hierarchy COMMAND
@@ -72,7 +72,7 @@ OPTIONS
   -v, --version                      show the version
 ```
 
-_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.2.0/src/commands/index.ts)_
+_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.2.1/src/commands/index.ts)_
 
 ## `fs-hierarchy help [COMMAND]`
 
@@ -661,13 +661,8 @@ $ fs-hierarchy ./ -o tree -n -f '**/{utils,lib}/index.d.ts'
     │  │  ╰─ lib
     │  │     ╰─ index.d.ts
     │  ├─ dev-cli
-    │  │  ├─ lib
-    │  │  │  ╰─ index.d.ts
-    │  │  ╰─ node_modules
-    │  │     ╰─ @oclif
-    │  │        ╰─ plugin-help
-    │  │           ╰─ lib
-    │  │              ╰─ index.d.ts
+    │  │  ╰─ lib
+    │  │     ╰─ index.d.ts
     │  ├─ errors
     │  │  ╰─ lib
     │  │     ╰─ index.d.ts
