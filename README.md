@@ -24,6 +24,24 @@ Additionally it is possible:
 * [Filtering](#filtering)
 <!-- tocstop -->
   
+# Programmatic use
+
+```sh-session
+$ npm install fs-hierarchy
+```
+
+```javascript
+const { hierarchy } = require('fs-hirarchy');
+
+const root = __dirname;
+const options = {
+  filter: { match: '*.json' },
+  rootName: 'HomeSweetHome'
+};
+
+const myHierarchy = hierarchy(root, options);
+```
+
 # Command line
 <!-- usage -->
 ```sh-session
@@ -91,20 +109,6 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 <!-- commandsstop -->
-
-# Programmatic use
-
-```sh-session
-$ npm install fs-hierarchy
-```
-
-```javascript
-const { generateHierarchy } = require('fs-hirarchy');
-
-const root = '...';
-const options = {...};
-const myfiles = generateHierarchy(root, options);
-```
 
 <!-- Options -->
 ## Options
