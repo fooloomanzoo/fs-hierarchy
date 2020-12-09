@@ -35,7 +35,8 @@ const { hierarchy } = require('fs-hirarchy');
 
 const root = __dirname;
 const options = {
-  filter: { match: '*.json', withPath: true },
+  filter: { match: '*.json' },
+  include: { withPath: true },
   rootName: 'HomeSweetHome'
 };
 
