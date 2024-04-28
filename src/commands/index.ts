@@ -1,93 +1,134 @@
-#!/usr/bin/env ts-node
+import { Args, Command, Flags } from '@oclif/core';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
-import { Command } from '@oclif/command';
-import { flags } from '@oclif/command';
-import cli from 'cli-ux';
-import * as fs from 'fs';
-import * as path from 'path';
+import { toJSON } from '../lib/format/json.js';
+import { toTree } from '../lib/format/tree.js';
+import { toYAML } from '../lib/format/yaml.js';
+import { hierarchy } from '../lib/hierarchy/hierarchy.js';
+import { Hierarchy } from '../lib/types.js';
+import { toFile } from '../lib/write/file.js';
+import { toStdOut } from '../lib/write/stdout.js';
 
-import { hierarchy } from '../lib/hierarchy';
-import { toJSON, toTree, toYAML } from '../lib/format';
-import { toFile, toStdOut } from '../lib/write';
-
-export = class FsHierarchyCLI extends Command {
-  static description =
-    "Create a hierarchy map of a filesystem using node's built-in *fs*.";
-
-  static generateHierarchy = hierarchy;
-
-  static args = [
-    {
-      name: 'path',
-      required: false,
-      description: 'path to create a hierarchy from',
+export default class Index extends Command {
+  static args = {
+    dir: Args.string({
       default: '.',
-    },
-    {
-      name: 'output',
+      description: 'path to create a hierarchy from',
       required: false,
+    }),
+    output: Args.string({
       description: 'output filename',
-    },
-  ];
-
-  static flags = {
-    'help': flags.help({
-      char: 'h',
-      description: 'show this help',
-    }),
-    'version': flags.version({
-      char: 'v',
-      description: 'show the version',
-    }),
-    'format': flags.string({
-      char: 'o',
-      default: 'json',
-      description:
-        'used output format (overwritten if the the output path has a json- or yml/yaml-extension)',
-      options: ['json', 'tree', 'yaml'],
-    }),
-    'root-name': flags.string({
-      char: 'r',
-      description: 'the used name for the root-folder',
-    }),
-    'follow-symlinks': flags.boolean({
-      char: 's',
-      default: false,
-      description: 'follow symbolic links',
-    }),
-    'include': flags.string({
-      char: 'i',
-      description: 'the included informations in return object',
-      multiple: true,
-      options: ['ext', 'path', 'stats', 'type'],
-    }),
-    'filter': flags.string({
-      char: 'f',
-      description: "enable filtering for paths (glob), negate by leading '!'",
-      parse: m => m.replace(/\\!/g, '!'),
-      dependsOn: ['filter'],
-    }),
-    'no-empty': flags.boolean({
-      char: 'n',
-      description: 'to filter child nodes that have no children',
+      required: false,
     }),
   };
 
-  async run() {
-    const { args, flags } = this.parse(FsHierarchyCLI);
-    let formatter;
+  static description =
+    "Create a hierarchy map of a filesystem using node's built-in *fs*.";
+
+  static flags = {
+    empty: Flags.boolean({
+      char: 'e',
+      summary: 'include child nodes that have no children',
+    }),
+    flat: Flags.boolean({
+      aliases: ['flatten'],
+      default: false,
+      description:
+        'if true the full path will be included by default. using tree format the full path will be used instead of the filenames',
+      summary: 'flatten the output',
+    }),
+    format: Flags.string({
+      char: 'f',
+      default: 'json',
+      options: ['tree', 'yaml', 'json'],
+      summary: 'the used output format',
+    }),
+    help: Flags.help({
+      char: 'h',
+      description: undefined,
+      summary: 'show this help',
+    }),
+    include: Flags.string({
+      char: 'i',
+      multiple: true,
+      options: ['ext', 'path', 'stats', 'type'],
+      summary: 'the included informations in return object',
+    }),
+    match: Flags.string({
+      char: 'm',
+      description: `use glob pattern for matching
+        negate by leading '!'
+        one of options have to match so the found is included
+        e.g. -m '**/*.ts' '!**/node_modules/**'`,
+      multiple: true,
+      parse: async m => m.replaceAll('\\!', '!'),
+      summary: 'filter matching paths',
+    }),
+    minify: Flags.boolean({
+      aliases: ['min'],
+      default: false,
+      description: 'only for json format',
+      relationships: [
+        {
+          flags: [
+            {
+              name: 'format',
+              when: async flags => flags.format === 'json',
+            },
+          ],
+          type: 'all',
+        },
+      ],
+      summary: 'minify the output',
+    }),
+    root: Flags.string({
+      char: 'r',
+      summary: 'the used name for the root-folder',
+    }),
+    symlinks: Flags.boolean({
+      char: 's',
+      default: false,
+      summary: 'follow symbolic links',
+    }),
+    version: Flags.version({
+      char: 'v',
+      description: undefined,
+      summary: 'show the version',
+    }),
+  };
+
+  public async run() {
+    const { args, flags } = await this.parse(Index);
+    const { empty, flat, format, include, match, minify, root, symlinks } =
+      flags;
+    const included = include?.length
+      ? {
+          extension: include?.includes('ext'),
+          pathname: include?.includes('path'),
+          stats: include?.includes('stats'),
+          type: include?.includes('type'),
+        }
+      : { pathname: flat };
+
+    let formatter: (h: Hierarchy, flatten?: boolean) => string;
     let writer = toStdOut;
 
-    switch (flags.format.toLowerCase()) {
-      case 'tree':
+    switch (format) {
+      case 'yaml': {
+        formatter = (h: Hierarchy) => toYAML(h);
+        break;
+      }
+
+      case 'tree': {
         formatter = toTree;
         break;
-      case 'yaml':
-        formatter = toYAML;
+      }
+
+      default: {
+        formatter = toJSON(minify ? 0 : 2);
         break;
-      case 'json':
-      default:
-        formatter = toJSON(2);
+      }
     }
 
     if (args.output) {
@@ -96,43 +137,38 @@ export = class FsHierarchyCLI extends Command {
 
       switch (extension) {
         case '.yml':
-        case '.yaml':
-          formatter = toYAML;
+        case '.yaml': {
+          formatter = (h: Hierarchy) => toYAML(h);
           break;
-        case '.json':
-          formatter = toJSON();
+        }
+
+        case '.json': {
+          if (!['json', 'json-min'].includes(format)) {
+            formatter = toJSON(2);
+          }
+
           break;
+        }
       }
     }
 
     try {
-      await fs.promises.access(path.resolve(args.path));
+      await fs.promises.access(path.resolve(args.dir));
     } catch (error) {
-      this.error(error);
+      this.error(error as Error);
     }
 
-    cli.action.start('create hierarchy');
-
-    const result = await FsHierarchyCLI.generateHierarchy(args.path, {
-      filter: flags.filter
-        ? {
-            ...(flags.filter ? { match: flags.filter } : {}),
-            ...(flags['no-empty'] ? { noEmpty: Boolean(['no-empty']) } : {}),
-          }
-        : undefined,
-      followSymlinks: flags['follow-symlinks'],
-      include: {
-        withExtension: flags.include?.includes('ext'),
-        withPath: flags.include?.includes('path'),
-        withStats: flags.include?.includes('stats'),
-        withType: flags.include?.includes('type'),
+    const result = await hierarchy(args.dir, {
+      filter: {
+        ...(match ? { match } : {}),
+        ...(empty ? { empty: true } : {}),
       },
-      rootName: flags['root-name'],
+      flatten: flat,
+      include: included,
+      rootName: root,
+      symlinks,
     });
-    cli.action.stop();
 
-    cli.action.start('output results');
-    writer(formatter(result));
-    cli.action.stop();
+    writer(formatter(result, flat));
   }
-};
+}

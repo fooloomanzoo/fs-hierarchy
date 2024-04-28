@@ -1,12 +1,12 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 /**
  * Returns a file-writer function.
  *
  * @param pathname - the pathname of the file
  */
-const toFile = (pathname: string) => (content: string | Buffer) =>
-  fs.writeFileSync(path.resolve(pathname), content);
-
-export default toFile;
+export function toFile(pathname: string) {
+  return (content: Buffer | string) =>
+    fs.writeFileSync(path.resolve(pathname), content);
+}

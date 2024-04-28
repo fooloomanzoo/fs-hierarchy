@@ -1,14 +1,16 @@
 {
   "plugins": [
-    "@typescript-eslint/eslint-plugin",
+    "@typescript-eslint",
     "prettier",
-    "eslint-plugin-tsdoc"
+    "eslint-plugin-tsdoc",
+    "node"
   ],
   "extends": [
+    "eslint:recommended",
     "oclif",
     "oclif-typescript",
     "prettier",
-    "prettier/@typescript-eslint"
+    "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "env": {

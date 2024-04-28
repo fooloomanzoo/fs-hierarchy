@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:18-alpine
 
 ENV NPM_ENV=production
 ENV NPM_CONFIG_PREFIX=/usr/node/.npm-global

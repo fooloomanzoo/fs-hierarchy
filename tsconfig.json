@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "importHelpers": true,
-    "removeComments": true,
-    "module": "commonjs",
-    "outDir": "lib",
+    "esModuleInterop": true,
+    "lib": ["ESNext"],
+    "module": "Node16",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
     "rootDir": "src",
+    "skipLibCheck": true,
     "strict": true,
-    "target": "es2018"
+    "target": "ESNext",
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["./src/**/*"],
+  "ts-node": {
+    "esm": true
+  }
 }

@@ -1,3 +1,1 @@
-import hierarchy = require('./lib/hierarchy');
-
-export = hierarchy;
+export { run } from '@oclif/core';

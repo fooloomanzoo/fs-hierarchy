@@ -3,9 +3,7 @@
  *
  * @param content - the content to be given out
  */
-const toStdOut = (content: string | Buffer) => {
+export function toStdOut(content: Buffer | string) {
   process.stdout.write(content);
   process.stdout.write('\n');
-};
-
-export default toStdOut;
+}

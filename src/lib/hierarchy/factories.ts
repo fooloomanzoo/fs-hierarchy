@@ -1,6 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import type { Node, Leaf, Types, Options } from '../../types';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
+import type { Leaf, Node, Options, Type } from '../types.js';
 
 /**
  * Returns a {@link Leaf}-object.
@@ -12,29 +13,29 @@ import type { Node, Leaf, Types, Options } from '../../types';
  *
  * @returns An object that contains informations about the wanted leaf.
  */
-export function leafFactory(
+export function leaf(
   name: string,
   pathname: string,
-  type: Types,
+  type: Type,
   include: Options['include'] = {},
 ): Leaf {
   const ret: Leaf = {
     name,
   };
 
-  if (include.withPath) {
+  if (include.pathname) {
     ret.path = pathname;
   }
 
-  if (include.withExtension) {
+  if (include.extension) {
     ret.extension = path.extname(pathname);
   }
 
-  if (include.withType) {
+  if (include.type) {
     ret.type = type;
   }
 
-  if (include.withStats) {
+  if (include.stats) {
     ret.stats = fs.lstatSync(pathname);
   }
 
@@ -51,72 +52,14 @@ export function leafFactory(
  *
  * @returns An object that contains informations about the wanted node.
  */
-export function nodeFactory(
+export function node(
   name: string,
   pathname: string,
-  type: Types,
+  type: Type,
   include: Options['include'] = {},
 ): Node {
   return {
-    ...leafFactory(name, pathname, type, { ...include, withExtension: false }),
+    ...leaf(name, pathname, type, { ...include, extension: false }),
     children: [],
   };
 }
-
-/**
- * Resolves the type of an entry given by *fs*.
- *
- * @param entry - an entry given by various *fs*-functions
- *
- * @returns the type of the entry
- */
-export const resolveType = (entry: fs.Dirent | fs.Stats): Types => {
-  if (entry.isFile()) return 'file';
-  if (entry.isDirectory()) return 'dir';
-  if (entry.isSymbolicLink()) return 'symlink';
-  if (entry.isBlockDevice()) return 'block-device';
-  if (entry.isCharacterDevice()) return 'char-device';
-  if (entry.isFIFO()) return 'pipe';
-  if (entry.isSocket()) return 'socket';
-};
-
-/**
- * Define which type should be treated like a {@link Leaf} or a {@link Node}.
- *
- * @param pathname -       the absolute path
- * @param type -           the type of the entry
- * @param followSymlinks - if true then symbol links are followed
- * @param rootpath -       the path to the given root
- *
- * @returns if true the path should be treated like a leaf.
- */
-export const shouldTreatAsLeaf = (
-  pathname: string,
-  type: Types,
-  followSymlinks?: boolean,
-  rootpath: string = pathname,
-): boolean => {
-  if (type === 'dir') return false;
-
-  if (type === 'symlink') {
-    if (followSymlinks) {
-      // NOTE: the symbolic link's target might not exist
-      try {
-        const realpath = fs.realpathSync.native(pathname);
-        // NOTE: if the symbolic link is targeting a path whose path
-        //   starts with the one from where the recursion started, the
-        //   link is likely circular. attempt to prevent infinite loops
-        if (!realpath.startsWith(rootpath)) {
-          return shouldTreatAsLeaf(
-            realpath,
-            resolveType(fs.lstatSync(realpath)),
-            followSymlinks,
-            rootpath,
-          );
-        }
-      } catch {}
-    }
-  }
-
-  return true;
-};

@@ -1,4 +1,4 @@
-# Dockerfile for `fs-hierachy`
+# Docker for `fs-hierachy`
 [![Docker Pulls](https://img.shields.io/docker/pulls/fooloomanzoo/fs-hierarchy?style=for-the-badge)](https://hub.docker.com/repository/docker/fooloomanzoo/fs-hierarchy)
 [![Images Size](https://img.shields.io/docker/image-size/fooloomanzoo/fs-hierarchy?sort=date&style=for-the-badge)](https://hub.docker.com/repository/docker/fooloomanzoo/fs-hierarchy)
 

@@ -18,10 +18,7 @@ Additionally it is possible:
 
 <!-- toc -->
 * [Programmatic use](#programmatic-use)
-* [Command line](#command-line)
 * [Structures](#structures)
-* [Output](#output)
-* [Filtering](#filtering)
 <!-- tocstop -->
   
 # Programmatic use
@@ -33,87 +30,140 @@ $ npm install fs-hierarchy
 ```javascript
 const { hierarchy } = require('fs-hirarchy');
 
-const root = __dirname;
+const root = path.resolve(__dirname, 'files');
 const options = {
   filter: { match: '*.json' },
-  include: { withPath: true },
+  include: { path: true },
   rootName: 'HomeSweetHome'
 };
 
-const myHierarchy = hierarchy(root, options);
+const matches = hierarchy(root, options);
 ```
 
-# Command line
-<!-- usage -->
-```sh-session
-$ npm install -g fs-hierarchy
-$ fs-hierarchy COMMAND
-running command...
-$ fs-hierarchy (-v|--version|version)
-fs-hierarchy/1.2.2 linux-x64 node-v14.15.1
-$ fs-hierarchy --help [COMMAND]
-USAGE
-  $ fs-hierarchy COMMAND
-...
+Using the CLI, `fs-hierarchy` supports different output formats and options.
+
+<!-- output -->
+## JSON
+ 
+```shell-script
+$ fs-hierarchy ./src -m 'index.ts'
 ```
-<!-- usagestop -->
+
+
+```json
+{
+  "name": "./src",
+  "children": [
+    {
+      "name": "commands",
+      "children": [
+        {
+          "name": "index.ts"
+        }
+      ]
+    },
+    {
+      "name": "index.ts"
+    }
+  ]
+}
+
+```
+
+
+## Tree
+ 
+```shell-script
+$ fs-hierarchy ./src -f tree -m '*.ts'
+```
+
+
+```
+./src
+ ├─ commands
+ │  ╰─ index.ts
+ ├─ index.ts
+ ╰─ lib
+    ├─ format
+    │  ├─ json.ts
+    │  ├─ tree.ts
+    │  ╰─ yaml.ts
+    ├─ hierarchy
+    │  ├─ factories.ts
+    │  ├─ hierarchy.ts
+    │  ├─ read-dir.ts
+    │  ╰─ utils
+    │     ├─ flatten.ts
+    │     ├─ leaf.ts
+    │     ╰─ type.ts
+    ├─ typeguards.ts
+    ├─ types.ts
+    ╰─ write
+       ├─ file.ts
+       ╰─ stdout.ts
+
+
+```
+
+
+<!-- outputstop -->
 
 ## Commands
 <!-- commands -->
-* [`fs-hierarchy [PATH] [OUTPUT]`](#fs-hierarchy-path-output)
-* [`fs-hierarchy help [COMMAND]`](#fs-hierarchy-help-command)
+* [`fs-hierarchy [DIR] [OUTPUT]`](#fs-hierarchy-dir-output)
 
-## `fs-hierarchy [PATH] [OUTPUT]`
+## `fs-hierarchy [DIR] [OUTPUT]`
 
 Create a hierarchy map of a filesystem using node's built-in *fs*.
 
 ```
 USAGE
-  $ fs-hierarchy [PATH] [OUTPUT]
+  $ fs-hierarchy  [DIR] [OUTPUT] [-e] [--flat] [-f tree|yaml|json] [-h] [-i ext|path|stats|type] [-m
+    <value>] [--minify] [-r <value>] [-s] [-v]
 
 ARGUMENTS
-  PATH    [default: .] path to create a hierarchy from
+  DIR     [default: .] path to create a hierarchy from
   OUTPUT  output filename
 
-OPTIONS
-  -f, --filter=filter                enable filtering for paths (glob), negate by leading '!'
-  -h, --help                         show this help
-  -i, --include=ext|path|stats|type  the included informations in return object
-  -n, --no-empty                     to filter child nodes that have no children
+FLAGS
+  -e, --empty                include child nodes that have no children
+  -f, --format=<option>      [default: json] the used output format
+                             <options: tree|yaml|json>
+  -h, --help                 show this help
+  -i, --include=<option>...  the included informations in return object
+                             <options: ext|path|stats|type>
+  -m, --match=<value>...     filter matching paths
+  -r, --root=<value>         the used name for the root-folder
+  -s, --symlinks             follow symbolic links
+  -v, --version              show the version
+      --flat                 flatten the output
+      --minify               minify the output
 
-  -o, --format=json|tree|yaml        [default: json] used output format (overwritten if the the output path has a json-
-                                     or yml/yaml-extension)
+DESCRIPTION
+  Create a hierarchy map of a filesystem using node's built-in *fs*.
 
-  -r, --root-name=root-name          the used name for the root-folder
+FLAG DESCRIPTIONS
+  -m, --match=<value>...  filter matching paths
 
-  -s, --follow-symlinks              follow symbolic links
+    use glob pattern for matching
+    negate by leading '!'
+    one of options have to match so the found is included
+    e.g. -m '**/*.ts' '!**/node_modules/**'
 
-  -v, --version                      show the version
+  --flat  flatten the output
+
+    if true the full path will be included by default. using tree format the full path will be used instead of the
+    filenames
+
+  --minify  minify the output
+
+    only for json format
 ```
-
-_See code: [src/commands/index.ts](https://github.com/fooloomanzoo/fs-hierarchy/blob/1.2.2/src/commands/index.ts)_
-
-## `fs-hierarchy help [COMMAND]`
-
-display help for fs-hierarchy
-
-```
-USAGE
-  $ fs-hierarchy help [COMMAND]
-
-ARGUMENTS
-  COMMAND  command to show help for
-
-OPTIONS
-  --all  see all commands in CLI
-```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 <!-- commandsstop -->
 
 <!-- Options -->
 ## Options
-Use the options if want to filter the resulting [hierarchy](#Hierarchy) object or want to include extra informations.
+Use the options if you want to filter the resulting [hierarchy](#Hierarchy) object or want to include extra informations.
 
 
 name | optional | type | description 
@@ -132,30 +182,40 @@ rootName | ☑ | string | give the root a name
 <!-- Optionsstop -->
 <!-- MinimatchOptions -->
 ## MinimatchOptions
-[minimatch options](https://github.com/isaacs/minimatch#options) for filtering
+
 
 
 name | optional | type | description 
 --- | --- | --- | ---
-debug | ☑ | boolean (`false`) | Dump a ton of stuff to stderr.
-dot | ☑ | boolean (`true`) | Allow patterns to match filenames starting with a period, even if the pattern does not explicitly have a period in that spot.
-flipNegate | ☑ | boolean (`false`) | Returns from negate expressions the same as if they were not negated. (Ie, true on a hit, false on a miss.)
-matchBase | ☑ | boolean (`true`) | If set, then patterns without slashes will be matched against the basename of the path if it contains slashes.
-nobrace | ☑ | boolean (`false`) | Do not expand {a,b} and {1..3} brace sets.
-nocase | ☑ | boolean (`false`) | Perform a case-insensitive match.
-nocomment | ☑ | boolean (`false`) | Suppress the behavior of treating # at the start of a pattern as a comment.
-noext | ☑ | boolean (`false`) | Disable "extglob" style patterns like +(a|b).
-noglobstar | ☑ | boolean (`false`) | Disable ** matching against multiple folder names.
-nonegate | ☑ | boolean (`false`) | Suppress the behavior of treating a leading ! character as negation.
-nonull | ☑ | boolean (`false`) | When a match is not found by minimatch.match, return a list containing the pattern itself if this option is set. Otherwise, an empty list is returned if there are no matches.
+nobrace | ☑ | boolean (`undefined`) | ─
+nocomment | ☑ | boolean (`undefined`) | ─
+nonegate | ☑ | boolean (`undefined`) | ─
+debug | ☑ | boolean (`undefined`) | ─
+noglobstar | ☑ | boolean (`undefined`) | ─
+noext | ☑ | boolean (`undefined`) | ─
+nonull | ☑ | boolean (`undefined`) | ─
+windowsPathsNoEscape | ☑ | boolean (`undefined`) | ─
+allowWindowsEscape | ☑ | boolean (`undefined`) | ─
+partial | ☑ | boolean (`undefined`) | ─
+dot | ☑ | boolean (`undefined`) | ─
+nocase | ☑ | boolean (`undefined`) | ─
+nocaseMagicOnly | ☑ | boolean (`undefined`) | ─
+magicalBraces | ☑ | boolean (`undefined`) | ─
+matchBase | ☑ | boolean (`undefined`) | ─
+flipNegate | ☑ | boolean (`undefined`) | ─
+preserveMultipleSlashes | ☑ | boolean (`undefined`) | ─
+optimizationLevel | ☑ | number (`undefined`) | ─
+platform | ☑ | [Platform](#Platform) | ─
+windowsNoMagicRoot | ☑ | boolean (`undefined`) | ─
 <!-- MinimatchOptionsstop -->
+
 # Structures
 
-As a return (when using *json* or *yaml* as the output format) there are certain properties available by default. Optional it is possible to include some extra properties.
+For the return (when using *json* or *yaml* as the output format) there are certain properties available by default. Optional it is possible to include certain extra properties.
 
 <!-- Hierarchy -->
 ## Hierarchy
-
+The hierarchy map that will be returned. It can either be a [Leaf](#Leaf) or a [Node](#Node)
 [Leaf](#Leaf), [Node](#Node)
 
 
@@ -168,11 +228,11 @@ As a return (when using *json* or *yaml* as the output format) there are certain
 
 name | optional | type | description 
 --- | --- | --- | ---
-children | ☐ | array (``[]``) | children of the node
-name | ☐ | string | the name of the entry (without the base path)
-path | ☑ | string | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
+children | ☐ | array (`undefined`) | children of the node
+type | ☑ | [Type](#Type) | optionally included [kind](#Kind) in the filesystem
+name | ☐ | string (`undefined`) | the name of the entry (without the base path)
+path | ☑ | string (`undefined`) | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
 stats | ☑ | [Stats](#Stats) | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
-type | ☑ | [Types](#Types) | optionally included [type](#Types) in the filesystem
 <!-- Nodestop -->
 
 <!-- Leaf -->
@@ -182,11 +242,11 @@ type | ☑ | [Types](#Types) | optionally included [type](#Types) in the filesys
 
 name | optional | type | description 
 --- | --- | --- | ---
-extension | ☑ | string | optionally included [extension](https://nodejs.org/api/path.html#path_path_extname_path) (only for [Leaf](#Leaf)s)
-name | ☐ | string | the name of the entry (without the base path)
-path | ☑ | string | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
+extension | ☑ | string (`undefined`) | optionally included [extension](https://nodejs.org/api/path.html#path_path_extname_path) (only for [Leaf](#Leaf)s)
+name | ☐ | string (`undefined`) | the name of the entry (without the base path)
+path | ☑ | string (`undefined`) | optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths)
 stats | ☑ | [Stats](#Stats) | optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats)
-type | ☑ | [Types](#Types) | optionally included [type](#Types) in the filesystem
+type | ☑ | [Type](#Type) | optionally included [kind](#Kind) in the filesystem
 <!-- Leafstop -->
 
 <!-- Types -->
@@ -204,558 +264,83 @@ Types of a [Leaf](#Leaf) or [Node](#Node) entry
 <!-- Typesstop -->
 <!-- Stats -->
 ## Stats
+A `fs.Stats` object provides information about a file.
 
+Objects returned from {@link stat}, {@link lstat} and {@link fstat} and
+their synchronous counterparts are of this type.
+If `bigint` in the `options` passed to those methods is true, the numeric values
+will be `bigint` instead of `number`, and the object will contain additional
+nanosecond-precision properties suffixed with `Ns`.
+
+```console
+Stats {
+  dev: 2114,
+  ino: 48064969,
+  mode: 33188,
+  nlink: 1,
+  uid: 85,
+  gid: 100,
+  rdev: 0,
+  size: 527,
+  blksize: 4096,
+  blocks: 8,
+  atimeMs: 1318289051000.1,
+  mtimeMs: 1318289051000.1,
+  ctimeMs: 1318289051000.1,
+  birthtimeMs: 1318289051000.1,
+  atime: Mon, 10 Oct 2011 23:24:11 GMT,
+  mtime: Mon, 10 Oct 2011 23:24:11 GMT,
+  ctime: Mon, 10 Oct 2011 23:24:11 GMT,
+  birthtime: Mon, 10 Oct 2011 23:24:11 GMT }
+```
+
+`bigint` version:
+
+```console
+BigIntStats {
+  dev: 2114n,
+  ino: 48064969n,
+  mode: 33188n,
+  nlink: 1n,
+  uid: 85n,
+  gid: 100n,
+  rdev: 0n,
+  size: 527n,
+  blksize: 4096n,
+  blocks: 8n,
+  atimeMs: 1318289051000n,
+  mtimeMs: 1318289051000n,
+  ctimeMs: 1318289051000n,
+  birthtimeMs: 1318289051000n,
+  atimeNs: 1318289051000000000n,
+  mtimeNs: 1318289051000000000n,
+  ctimeNs: 1318289051000000000n,
+  birthtimeNs: 1318289051000000000n,
+  atime: Mon, 10 Oct 2011 23:24:11 GMT,
+  mtime: Mon, 10 Oct 2011 23:24:11 GMT,
+  ctime: Mon, 10 Oct 2011 23:24:11 GMT,
+  birthtime: Mon, 10 Oct 2011 23:24:11 GMT }
+```
 
 
 name | optional | type | description 
 --- | --- | --- | ---
-atime | ☐ | string | Enables basic storage and retrieval of dates and times.
-atimeMs | ☐ | number | ─
-birthtime | ☐ | string | Enables basic storage and retrieval of dates and times.
-birthtimeMs | ☐ | number | ─
-blksize | ☐ | number | ─
-blocks | ☐ | number | ─
-ctime | ☐ | string | Enables basic storage and retrieval of dates and times.
-ctimeMs | ☐ | number | ─
-dev | ☐ | number | ─
-gid | ☐ | number | ─
-ino | ☐ | number | ─
-mode | ☐ | number | ─
-mtime | ☐ | string | Enables basic storage and retrieval of dates and times.
-mtimeMs | ☐ | number | ─
-nlink | ☐ | number | ─
-rdev | ☐ | number | ─
-size | ☐ | number | ─
-uid | ☐ | number | ─
+dev | ☐ | number (`undefined`) | ─
+ino | ☐ | number (`undefined`) | ─
+mode | ☐ | number (`undefined`) | ─
+nlink | ☐ | number (`undefined`) | ─
+uid | ☐ | number (`undefined`) | ─
+gid | ☐ | number (`undefined`) | ─
+rdev | ☐ | number (`undefined`) | ─
+size | ☐ | number (`undefined`) | ─
+blksize | ☐ | number (`undefined`) | ─
+blocks | ☐ | number (`undefined`) | ─
+atimeMs | ☐ | number (`undefined`) | ─
+mtimeMs | ☐ | number (`undefined`) | ─
+ctimeMs | ☐ | number (`undefined`) | ─
+birthtimeMs | ☐ | number (`undefined`) | ─
+atime | ☐ | string (`undefined`) | ─
+mtime | ☐ | string (`undefined`) | ─
+ctime | ☐ | string (`undefined`) | ─
+birthtime | ☐ | string (`undefined`) | ─
 <!-- Statsstop -->
-
-
-# Output
-<!-- output -->
-## JSON
- 
-```shell-script
-$ fs-hierarchy ./src
-```
-
-
-```json
-{
-  "name": "./src",
-  "children": [
-    {
-      "name": "commands",
-      "children": [
-        {
-          "name": "index.ts"
-        }
-      ]
-    },
-    {
-      "name": "index.ts"
-    },
-    {
-      "name": "lib",
-      "children": [
-        {
-          "name": "format",
-          "children": [
-            {
-              "name": "index.ts"
-            },
-            {
-              "name": "json.ts"
-            },
-            {
-              "name": "tree.ts"
-            },
-            {
-              "name": "yaml.ts"
-            }
-          ]
-        },
-        {
-          "name": "hierarchy",
-          "children": [
-            {
-              "name": "factories.ts"
-            },
-            {
-              "name": "index.ts"
-            },
-            {
-              "name": "read-dir.ts"
-            }
-          ]
-        },
-        {
-          "name": "typeguards.ts"
-        },
-        {
-          "name": "write",
-          "children": [
-            {
-              "name": "file.ts"
-            },
-            {
-              "name": "index.ts"
-            },
-            {
-              "name": "stdout.ts"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "types.ts"
-    }
-  ]
-}
-
-```
-
-
-## with extension, path, type & stats
- 
-```shell-script
-$ fs-hierarchy ./test -i ext path type stats
-```
-
-
-```json
-{
-  "name": "./test",
-  "path": "/home/buddy/projects/fs-hierarchy/test",
-  "type": "dir",
-  "stats": {
-    "dev": 2051,
-    "mode": 16893,
-    "nlink": 2,
-    "uid": 1000,
-    "gid": 1000,
-    "rdev": 0,
-    "blksize": 4096,
-    "ino": 2500760,
-    "size": 4096,
-    "blocks": 8,
-    "atimeMs": 1591515507954.0964,
-    "mtimeMs": 1590655938999.0305,
-    "ctimeMs": 1590655938999.0305,
-    "birthtimeMs": 1590655929458.9397,
-    "atime": "2020-06-07T07:38:27.954Z",
-    "mtime": "2020-05-28T08:52:18.999Z",
-    "ctime": "2020-05-28T08:52:18.999Z",
-    "birthtime": "2020-05-28T08:52:09.459Z"
-  },
-  "children": [
-    {
-      "name": "index.test.ts",
-      "path": "/home/buddy/projects/fs-hierarchy/test/index.test.ts",
-      "extension": ".ts",
-      "type": "file",
-      "stats": {
-        "dev": 2051,
-        "mode": 33204,
-        "nlink": 1,
-        "uid": 1000,
-        "gid": 1000,
-        "rdev": 0,
-        "blksize": 4096,
-        "ino": 2500771,
-        "size": 426,
-        "blocks": 8,
-        "atimeMs": 1591517214816.851,
-        "mtimeMs": 1590706118297.9292,
-        "ctimeMs": 1590706118297.9292,
-        "birthtimeMs": 1590655938999.0305,
-        "atime": "2020-06-07T08:06:54.817Z",
-        "mtime": "2020-05-28T22:48:38.298Z",
-        "ctime": "2020-05-28T22:48:38.298Z",
-        "birthtime": "2020-05-28T08:52:18.999Z"
-      }
-    },
-    {
-      "name": "mocha.opts",
-      "path": "/home/buddy/projects/fs-hierarchy/test/mocha.opts",
-      "extension": ".opts",
-      "type": "file",
-      "stats": {
-        "dev": 2051,
-        "mode": 33204,
-        "nlink": 1,
-        "uid": 1000,
-        "gid": 1000,
-        "rdev": 0,
-        "blksize": 4096,
-        "ino": 2500764,
-        "size": 92,
-        "blocks": 8,
-        "atimeMs": 1591517214816.851,
-        "mtimeMs": 1590655929458.9397,
-        "ctimeMs": 1590655929458.9397,
-        "birthtimeMs": 1590655929458.9397,
-        "atime": "2020-06-07T08:06:54.817Z",
-        "mtime": "2020-05-28T08:52:09.459Z",
-        "ctime": "2020-05-28T08:52:09.459Z",
-        "birthtime": "2020-05-28T08:52:09.459Z"
-      }
-    },
-    {
-      "name": "tsconfig.json",
-      "path": "/home/buddy/projects/fs-hierarchy/test/tsconfig.json",
-      "extension": ".json",
-      "type": "file",
-      "stats": {
-        "dev": 2051,
-        "mode": 33204,
-        "nlink": 1,
-        "uid": 1000,
-        "gid": 1000,
-        "rdev": 0,
-        "blksize": 4096,
-        "ino": 2500761,
-        "size": 120,
-        "blocks": 8,
-        "atimeMs": 1591517214816.851,
-        "mtimeMs": 1590655929458.9397,
-        "ctimeMs": 1590655929458.9397,
-        "birthtimeMs": 1590655929458.9397,
-        "atime": "2020-06-07T08:06:54.817Z",
-        "mtime": "2020-05-28T08:52:09.459Z",
-        "ctime": "2020-05-28T08:52:09.459Z",
-        "birthtime": "2020-05-28T08:52:09.459Z"
-      }
-    }
-  ]
-}
-
-```
-
-
-## YAML
- 
-```shell-script
-$ fs-hierarchy ./src -o yaml
-```
-
-
-```yaml
-name: "./src"
-children: 
-  - name: "commands"
-    children: 
-      - name: "index.ts"
-  - name: "index.ts"
-  - name: "lib"
-    children: 
-      - name: "format"
-        children: 
-          - name: "index.ts"
-          - name: "json.ts"
-          - name: "tree.ts"
-          - name: "yaml.ts"
-      - name: "hierarchy"
-        children: 
-          - name: "factories.ts"
-          - name: "index.ts"
-          - name: "read-dir.ts"
-      - name: "typeguards.ts"
-      - name: "write"
-        children: 
-          - name: "file.ts"
-          - name: "index.ts"
-          - name: "stdout.ts"
-  - name: "types.ts"
-
-```
-
-
-## Tree
- 
-```shell-script
-$ fs-hierarchy ./src -o tree
-```
-
-
-```
-./src
- ├─ commands
- │  ╰─ index.ts
- ├─ index.ts
- ├─ lib
- │  ├─ format
- │  │  ├─ index.ts
- │  │  ├─ json.ts
- │  │  ├─ tree.ts
- │  │  ╰─ yaml.ts
- │  ├─ hierarchy
- │  │  ├─ factories.ts
- │  │  ├─ index.ts
- │  │  ╰─ read-dir.ts
- │  ├─ typeguards.ts
- │  ╰─ write
- │     ├─ file.ts
- │     ├─ index.ts
- │     ╰─ stdout.ts
- ╰─ types.ts
-
-
-```
-
-
-<!-- examplesstop -->
-
-# Filtering
-<!-- filter -->
-## match files
- 
-```shell-script
-$ fs-hierarchy ./src --filter 'index.ts'
-```
-
-
-```
-{
-  "name": "./src",
-  "children": [
-    {
-      "name": "commands",
-      "children": [
-        {
-          "name": "index.ts"
-        }
-      ]
-    },
-    {
-      "name": "index.ts"
-    },
-    {
-      "name": "lib",
-      "children": [
-        {
-          "name": "format",
-          "children": [
-            {
-              "name": "index.ts"
-            }
-          ]
-        },
-        {
-          "name": "hierarchy",
-          "children": [
-            {
-              "name": "index.ts"
-            }
-          ]
-        },
-        {
-          "name": "write",
-          "children": [
-            {
-              "name": "index.ts"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-
-```
-
-
-## match (including empty nodes)
- 
-```shell-script
-$ fs-hierarchy ./src -o tree -f '**/format/*'
-```
-
-
-```
-./src
- ├╌ commands
- ╰─ lib
-    ├─ format
-    │  ├─ index.ts
-    │  ├─ json.ts
-    │  ├─ tree.ts
-    │  ╰─ yaml.ts
-    ├╌ hierarchy
-    ╰╌ write
-
-
-```
-
-
-## filter empty nodes
- 
-```shell-script
-$ fs-hierarchy ./src -o tree --no-empty -f '**/format/*'
-```
-
-
-```
-./src
- ╰─ lib
-    ╰─ format
-       ├─ index.ts
-       ├─ json.ts
-       ├─ tree.ts
-       ╰─ yaml.ts
-
-
-```
-
-
-## glob pattern list
- 
-```shell-script
-$ fs-hierarchy ./src -o tree -f '*@(e|x).ts'
-```
-
-
-```
-./src
- ├─ commands
- │  ╰─ index.ts
- ├─ index.ts
- ╰─ lib
-    ├─ format
-    │  ├─ index.ts
-    │  ╰─ tree.ts
-    ├─ hierarchy
-    │  ╰─ index.ts
-    ╰─ write
-       ├─ file.ts
-       ╰─ index.ts
-
-
-```
-
-
-## glob brace expansion
- 
-```shell-script
-$ fs-hierarchy ./ -o tree -n -f '**/{utils,lib}/index.d.ts'
-```
-
-
-```
-./fs-hierarchy
- ├─ lib
- │  ╰─ index.d.ts
- ╰─ node_modules
-    ├─ @microsoft
-    │  ├─ tsdoc
-    │  │  ╰─ lib
-    │  │     ╰─ index.d.ts
-    │  ╰─ tsdoc-config
-    │     ╰─ lib
-    │        ╰─ index.d.ts
-    ├─ @nodelib
-    │  ╰─ fs.scandir
-    │     ╰─ out
-    │        ╰─ utils
-    │           ╰─ index.d.ts
-    ├─ @oclif
-    │  ├─ command
-    │  │  ╰─ lib
-    │  │     ╰─ index.d.ts
-    │  ├─ config
-    │  │  ╰─ lib
-    │  │     ╰─ index.d.ts
-    │  ├─ dev-cli
-    │  │  ╰─ lib
-    │  │     ╰─ index.d.ts
-    │  ├─ errors
-    │  │  ╰─ lib
-    │  │     ╰─ index.d.ts
-    │  ├─ parser
-    │  │  ╰─ lib
-    │  │     ╰─ index.d.ts
-    │  ├─ plugin-help
-    │  │  ╰─ lib
-    │  │     ╰─ index.d.ts
-    │  ╰─ test
-    │     ╰─ lib
-    │        ╰─ index.d.ts
-    ├─ @typescript-eslint
-    │  ╰─ scope-manager
-    │     ╰─ dist
-    │        ╰─ lib
-    │           ╰─ index.d.ts
-    ├─ cli-ux
-    │  ╰─ lib
-    │     ╰─ index.d.ts
-    ├─ eslint-plugin-tsdoc
-    │  ╰─ lib
-    │     ╰─ index.d.ts
-    ├─ fancy-test
-    │  ╰─ lib
-    │     ╰─ index.d.ts
-    ├─ fast-glob
-    │  ╰─ out
-    │     ╰─ utils
-    │        ╰─ index.d.ts
-    ├─ mock-stdin
-    │  ╰─ lib
-    │     ╰─ index.d.ts
-    ├─ qqjs
-    │  ╰─ lib
-    │     ╰─ index.d.ts
-    ╰─ stdout-stderr
-       ╰─ lib
-          ╰─ index.d.ts
-
-
-```
-
-
-## glob negation
- 
-```shell-script
-$ fs-hierarchy ./ -o tree -nf '!**/{lib,.git,node_modules}/**'
-```
-
-
-```
-./fs-hierarchy
- ├─ .editorconfig
- ├─ .eslintignore
- ├─ .eslintrc
- ├─ .gitattributes
- ├─ .gitignore
- ├─ .prettierrc
- ├─ .vscode
- │  ╰─ settings.json
- ├─ LICENSE
- ├─ README.md
- ├─ bin
- │  ├─ run
- │  ╰─ run.cmd
- ├─ docker
- │  ├─ Dockerfile
- │  ╰─ README.md
- ├─ oclif.manifest.json
- ├─ package-lock.json
- ├─ package.json
- ├─ src
- │  ├─ cli.ts
- │  ├─ commands
- │  │  ╰─ index.ts
- │  ├─ index.ts
- │  ╰─ types.ts
- ├─ test
- │  ├─ index.test.ts
- │  ├─ mocha.opts
- │  ╰─ tsconfig.json
- ├─ tsconfig.json
- ╰─ utils
-    ╰─ readme.js
-
-
-```
-
-
-<!-- filterstop -->

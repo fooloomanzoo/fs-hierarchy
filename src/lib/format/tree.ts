@@ -1,14 +1,16 @@
-import type { Hierarchy } from '../../types';
-import { isNode } from '../typeguards';
+import type { Hierarchy } from '../types.js';
+
+import { isNode } from '../typeguards.js';
 
 /**
  * Returns a tree-string-representation for a given hierarchy-structure.
  *
  * @param h -        the hierarchy-structure
  * @param indention - the current intention-preemble of the the current recursion step
+ * @param flatten -  whether the tree should be flattened
  */
-export const toTree = (h: Hierarchy, indention = '') => {
-  let tree = h.name + '\n';
+export const toTree = (h: Hierarchy, flatten = false, indention = '') => {
+  let tree = ((flatten && h.path) || h.name) + '\n';
 
   if (isNode(h)) {
     for (let i = 0; i < h.children.length; i++) {
@@ -18,13 +20,13 @@ export const toTree = (h: Hierarchy, indention = '') => {
       tree += indention;
       tree += isLastChild ? ' ╰' : ' ├';
 
-      if (isNode(child) && child.children.length === 0) {
-        tree += '╌ ';
-      } else {
-        tree += '─ ';
-      }
+      tree += isNode(child) && child.children.length === 0 ? '╌ ' : '─ ';
 
-      tree += toTree(h.children[i], indention + (isLastChild ? '   ' : ' │ '));
+      tree += toTree(
+        h.children[i],
+        flatten,
+        indention + (isLastChild ? '   ' : ' │ '),
+      );
     }
   }
 
