@@ -2,8 +2,6 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 import { createOutput } from './output';
-import { createSchema } from './schema';
-import { createSchemaTable } from './table';
 import { replaceTag } from './tags';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
@@ -11,24 +9,10 @@ const ROOT = path.join(__dirname, '..');
 
 async function main() {
   let content;
-  const schema = await createSchema();
-
-  if (!schema) {
-    throw new Error('Can not create type schema');
-
-    return;
-  }
 
   const README = path.resolve(ROOT, 'README.md');
   const readme = await fs.readFile(README);
   content = readme.toString();
-
-  if (schema.definitions) {
-    for (const key of Object.keys(schema.definitions)) {
-      const table = createSchemaTable(schema.definitions[key], `## ${key}`);
-      content = replaceTag(content, key, table);
-    }
-  }
 
   content = replaceTag(
     content.toString(),
@@ -75,7 +59,7 @@ async function main() {
         outputType: '',
       }),
       await createOutput({
-        args: './src/lib/hierarchy -f tree --flat',
+        args: './src/lib/utils -f tree --flat',
         name: 'Tree (flattened)',
         outputType: '',
       }),
@@ -85,17 +69,17 @@ async function main() {
         outputType: 'yaml',
       }),
       await createOutput({
-        args: './src/lib/hierarchy -f yaml --flat',
+        args: './src/lib/utils -f yaml --flat',
         name: 'YAML (flattened)',
         outputType: 'yaml',
       }),
       await createOutput({
-        args: './src/lib/hierarchy',
+        args: './src/lib/utils',
         name: 'JSON',
         outputType: 'json',
       }),
       await createOutput({
-        args: './src/lib/hierarchy --flat',
+        args: './src/lib/utils --flat',
         name: 'JSON (flattened)',
         outputType: 'json',
       }),
@@ -110,7 +94,7 @@ async function main() {
         outputType: 'json',
       }),
       await createOutput({
-        args: './src/lib/hierarchy -r "TOPLEVEL"',
+        args: './src/lib/utils -r "TOPLEVEL"',
         hiddenArgs: '-f tree',
         name: 'Custom root name',
         outputType: '',
@@ -120,7 +104,7 @@ async function main() {
 
   await fs.writeFile(FORMAT, content);
 
-  const FILTERS = path.resolve(ROOT, 'docs', 'filters.md');
+  const FILTERS = path.resolve(ROOT, 'docs', 'filter.md');
   content = await fs.readFile(FILTERS);
 
   content = replaceTag(
@@ -161,9 +145,21 @@ async function main() {
         outputType: '',
       }),
       await createOutput({
-        args: "./src -m '*n.ts' '*s.ts'",
+        args: "./src -m 't*.ts' '*s.ts' -M all",
         hiddenArgs: '-r "./src" -f tree',
-        name: 'multiple glob patterns',
+        name: 'filter by multiple patterns and matching all',
+        outputType: '',
+      }),
+      await createOutput({
+        args: "./src -m '*n.ts' '*s.ts' -M some",
+        hiddenArgs: '-r "./src" -f tree',
+        name: 'filter by multiple patterns and matching some (default)',
+        outputType: '',
+      }),
+      await createOutput({
+        args: "./src -m '*n.ts' '*s.ts' -M none",
+        hiddenArgs: '-r "./src" -f tree',
+        name: 'filter by multiple patterns and matching none',
         outputType: '',
       }),
       await createOutput({

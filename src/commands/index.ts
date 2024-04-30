@@ -5,8 +5,8 @@ import * as path from 'node:path';
 import { toJSON } from '../lib/format/json.js';
 import { toTree } from '../lib/format/tree.js';
 import { toYAML } from '../lib/format/yaml.js';
-import { hierarchy } from '../lib/hierarchy/hierarchy.js';
-import { Hierarchy } from '../lib/types.js';
+import { hierarchy } from '../lib/hierarchy.js';
+import { Hierarchy, MatchRule } from '../lib/types.js';
 import { toFile } from '../lib/write/file.js';
 import { toStdOut } from '../lib/write/stdout.js';
 
@@ -27,45 +27,53 @@ export default class Index extends Command {
     "Create a hierarchy map of a filesystem using node's built-in *fs*.";
 
   static flags = {
-    empty: Flags.boolean({
+    'empty': Flags.boolean({
       char: 'e',
       summary: 'include child nodes that have no children',
     }),
-    flat: Flags.boolean({
+    'flat': Flags.boolean({
       aliases: ['flatten'],
       default: false,
       description:
         'if true the full path will be included by default. using tree format the full path will be used instead of the filenames',
       summary: 'flatten the output',
     }),
-    format: Flags.string({
+    'format': Flags.string({
       char: 'f',
       default: 'json',
       options: ['tree', 'yaml', 'json'],
       summary: 'the used output format',
     }),
-    help: Flags.help({
+    'help': Flags.help({
       char: 'h',
       description: undefined,
       summary: 'show this help',
     }),
-    include: Flags.string({
+    'include': Flags.string({
       char: 'i',
       multiple: true,
       options: ['ext', 'path', 'stats', 'type'],
       summary: 'the included informations in return object',
     }),
-    match: Flags.string({
+    'match': Flags.string({
       char: 'm',
       description: `use glob pattern for matching
         negate by leading '!'
-        one of options have to match so the found is included
         e.g. -m '**/*.ts' '!**/node_modules/**'`,
       multiple: true,
       parse: async m => m.replaceAll('\\!', '!'),
       summary: 'filter matching paths',
     }),
-    minify: Flags.boolean({
+    'match-rule': Flags.string({
+      char: 'M',
+      default: 'some',
+      description: `when set to **all** all filters must resolve successfully,
+        when set to **some** at least one filter must resolve successfully,
+        when set to **none** no filter must resolve successfully`,
+      options: ['all', 'none', 'some'],
+      summary: 'rule for matching paths',
+    }),
+    'minify': Flags.boolean({
       aliases: ['min'],
       default: false,
       description: 'only for json format',
@@ -82,16 +90,16 @@ export default class Index extends Command {
       ],
       summary: 'minify the output',
     }),
-    root: Flags.string({
+    'root': Flags.string({
       char: 'r',
       summary: 'the used name for the root-folder',
     }),
-    symlinks: Flags.boolean({
+    'symlinks': Flags.boolean({
       char: 's',
       default: false,
       summary: 'follow symbolic links',
     }),
-    version: Flags.version({
+    'version': Flags.version({
       char: 'v',
       description: undefined,
       summary: 'show the version',
@@ -160,7 +168,7 @@ export default class Index extends Command {
 
     const result = await hierarchy(args.dir, {
       filter: {
-        ...(match ? { match } : {}),
+        ...(match ? { match, rule: flags['match-rule'] as MatchRule } : {}),
         ...(empty ? { empty: true } : {}),
       },
       flatten: flat,

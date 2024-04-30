@@ -12,7 +12,7 @@ export async function createOutput({
   name = '',
   outputType = 'json',
 }) {
-  const { stdout } = await execSync(`./bin/dev.js ${args} ${hiddenArgs}`, {
+  const { stdout } = await execSync(`./bin/run.js ${args} ${hiddenArgs}`, {
     cwd: ROOT,
   });
   return `## ${name}\n 

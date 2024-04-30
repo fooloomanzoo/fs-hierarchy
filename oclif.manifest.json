@@ -71,11 +71,26 @@
         },
         "match": {
           "char": "m",
-          "description": "use glob pattern for matching\n        negate by leading '!'\n        one of options have to match so the found is included\n        e.g. -m '**/*.ts' '!**/node_modules/**'",
+          "description": "use glob pattern for matching\n        negate by leading '!'\n        e.g. -m '**/*.ts' '!**/node_modules/**'",
           "name": "match",
           "summary": "filter matching paths",
           "hasDynamicHelp": false,
           "multiple": true,
+          "type": "option"
+        },
+        "match-rule": {
+          "char": "M",
+          "description": "when set to **all** all filters must resolve successfully,\n        when set to **some** at least one filter must resolve successfully,\n        when set to **none** no filter must resolve successfully",
+          "name": "match-rule",
+          "summary": "rule for matching paths",
+          "default": "some",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "options": [
+            "all",
+            "none",
+            "some"
+          ],
           "type": "option"
         },
         "minify": {

@@ -1,4 +1,4 @@
-import type { Hierarchy, Node } from '../../types.js';
+import type { Hierarchy, Node } from '../types.js';
 
 export function flatten(tree: Hierarchy): Node {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

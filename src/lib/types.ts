@@ -1,7 +1,9 @@
-import type { MinimatchOptions as IMinimatchOptions } from 'minimatch';
+import type { MinimatchOptions } from 'minimatch';
 import type { Stats } from 'node:fs';
 
-/** Types of a [Leaf](#Leaf) or [Node](#Node) entry */
+/**
+ * Types of a Leaf or Node entry
+ **/
 export type Type =
   | 'block-device'
   | 'char-device'
@@ -9,69 +11,123 @@ export type Type =
   | 'file'
   | 'pipe'
   | 'socket'
-  | 'symlink'
-  | undefined;
+  | 'symlink';
 
-/** **Leaf**-structure of the hierarchy map */
-export interface Leaf {
-  /** optionally included [extension](https://nodejs.org/api/path.html#path_path_extname_path) (only for [Leaf](#Leaf)s) */
+/**
+ * a Leaf of the hierarchy map
+ **/
+export type Leaf = {
+  /**
+   * optionally included extension (only for Leafs)
+   **/
   extension?: string;
-  /** the name of the entry (without the base path) */
+  /**
+   * the name of the entry (without the base path)
+   **/
   name: string;
-  /** optionally included absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths) */
+  /**
+   * optionally included absolute path
+   **/
   path?: string;
-  /** optionally included [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats) */
+  /**
+   * optionally included stats (https://nodejs.org/api/fs.html#fs_class_fs_stats)
+   **/
   stats?: Stats;
-  /** optionally included [kind](#Kind) in the filesystem */
+  /**
+   * optionally included Type in the filesystem
+   **/
   type?: Type;
-}
+};
 
-/** **Node**-structure of the hierarchy map */
-export interface Node extends Omit<Leaf, 'extension'> {
+/** a Node of the hierarchy map */
+export type Node = {
   /**
    * children of the node
    * @defaultValue `[]`
-   * */
+   **/
   children: Array<Leaf | Node>;
-}
+} & Omit<Leaf, 'extension'>;
 
-/** The hierarchy map that will be returned. It can either be a [Leaf](#Leaf) or a [Node](#Node) */
+/**
+ * The hierarchy map that will be returned. It can either be a Leaf or a Node.
+ **/
 export type Hierarchy = Leaf | Node;
 
-/** [minimatch options](https://github.com/isaacs/minimatch#options) for filtering */
-export type MinimatchOptions = {
+/**
+ * minimatch options for filtering (https://github.com/isaacs/minimatch#options)
+ **/
+export type MatchOptions = {
   /** @defaultValue true */
   dot?: boolean;
   /** @defaultValue true */
   matchBase?: boolean;
-} & IMinimatchOptions;
+} & MinimatchOptions;
 
-/** Use the options when you want to filter the resulting [hierarchy](#Hierarchy) object or want to include extra informations. */
-export interface Options {
-  /** use glob filter for the found [Leaf](#Leaf)s or the [Node](#Node)s. [minimatch](https://github.com/isaacs/minimatch) is used, have a look at the [differences](https://github.com/isaacs/minimatch#comparisons-to-other-fnmatchglob-implementations) */
+/**
+ * The logical rule how filter patterns should be applied
+ *
+ * when set to "all" all filters must resolve successfully,
+ * when set to "some" at least one filter must resolve successfully,
+ * when set to "none" no filter must resolve successfully
+ */
+export type MatchRule = 'all' | 'none' | 'some';
+
+/**
+ * Use the options when you want to filter the resulting Hierarchy object or want to include extra informations.
+ **/
+export type Options = {
+  /**
+   * filter options the resulting Hierarchy object
+   */
   filter?: {
-    /** when true and a [Node](#Node) has no children, the node will still be included in the output */
+    /**
+     * when "true" and a Node has no children, the node will still be included in the output
+     **/
     empty?: boolean;
-    /** glob filters for the absolute path of the found [Node](#Node)s. when all filters resolve successfully the node will be included. (negate by leading **!**) */
+    /**
+     * glob filters for the absolute path of the found Nodes. when all filters resolve successfully the node will be included. (negate by leading **!**)
+     **/
     match?: string | string[];
-    /** [minimatch options](https://github.com/isaacs/minimatch#options) for filtering */
-    options?: MinimatchOptions;
+    /**
+     * [minimatch options](https://github.com/isaacs/minimatch#options) for filtering
+     **/
+    options?: MatchOptions;
+    /**
+     * @defaultValue some
+     **/
+    rule?: MatchRule;
   };
-  /** when true the hierarchy will be flattened. in cli, when **json** is the output format, the pathname is automatically included, for the other output formats the pathname will be used instead of the filename. */
+  /**
+   * when "true" the hierarchy will be flattened. in cli, when "json" is the output format, the pathname is automatically included, for the other output formats the pathname will be used instead of the filename.
+   **/
   flatten?: boolean;
-  /** included in the return object */
+  /**
+   * included in the return object
+   **/
   include?: {
-    /** when *true*, include the [extension](https://nodejs.org/api/path.html#path_path_extname_path) in return object (only for [Leaf](#Leaf)s) */
+    /**
+     * when "true", include the extension in return object (only for Leafs)
+     **/
     extension?: boolean;
-    /** when *true*, include the absolute [path](https://nodejs.org/api/path.html#path_path_resolve_paths) in return object */
+    /**
+     * when "true", include the absolute path in return object
+     **/
     pathname?: boolean;
-    /** when *true*, include [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats) in return object */
+    /**
+     * when "true", include stats in return object (https://nodejs.org/api/fs.html#fs_class_fs_stats)
+     **/
     stats?: boolean;
-    /** when *true*, include [type](#Type) in return object */
+    /**
+     * when "true", include the type in return object
+     **/
     type?: boolean;
   };
-  /** give the root a name */
+  /**
+   * the used text of the root node
+   **/
   rootName?: string;
-  /** when true and there is a symlink, it can be tried to follow the link and determine its children when it is a node */
+  /**
+   * when "true", symlinks are followed
+   **/
   symlinks?: boolean;
-}
+};

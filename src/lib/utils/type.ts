@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import type { Type } from '../../types.js';
+import type { Type } from '../types.js';
 
 /**
  * Resolves the type of an entry given by *fs*.
@@ -10,7 +10,7 @@ import type { Type } from '../../types.js';
  * @returns the type of the entry
  */
 
-export const resolveType = (entry: fs.Dirent | fs.Stats): Type => {
+export const resolveType = (entry: fs.Dirent | fs.Stats): Type | undefined => {
   if (entry.isFile()) return 'file';
   if (entry.isDirectory()) return 'dir';
   if (entry.isSymbolicLink()) return 'symlink';

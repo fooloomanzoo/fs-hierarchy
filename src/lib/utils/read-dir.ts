@@ -1,4 +1,5 @@
-/* eslint-disable unicorn/prefer-regexp-test */
+/* eslint-disable max-depth */
+
 /* eslint-disable max-params */
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -6,8 +7,8 @@ import * as path from 'node:path';
 import type { Node, Options } from '../types.js';
 
 import { leaf, node } from './factories.js';
-import { isLeaf } from './utils/leaf.js';
-import { resolveType } from './utils/type.js';
+import { isLeaf } from './leaf.js';
+import { resolveType } from './type.js';
 
 type Matcher = { match: (path: string) => boolean };
 
@@ -36,8 +37,30 @@ export function readdirRecursive(
 
     if (isLeaf(resolvedPath, type, options.symlinks, rootPath)) {
       // optionally apply filter to the path of a leaf
-      if (matchers.every(m => !m.match(resolvedPath))) {
-        continue;
+      if (options.filter && matchers.length > 0) {
+        switch (options.filter.rule) {
+          case 'all': {
+            if (!matchers.every(m => m.match(resolvedPath))) {
+              continue;
+            }
+
+            break;
+          }
+
+          case 'none': {
+            if (matchers.some(m => m.match(resolvedPath))) {
+              continue;
+            }
+
+            break;
+          }
+
+          default: {
+            if (!matchers.some(m => m.match(resolvedPath))) {
+              continue;
+            }
+          }
+        }
       }
 
       tree.children.push(leaf(entry.name, resolvedPath, type, options.include));

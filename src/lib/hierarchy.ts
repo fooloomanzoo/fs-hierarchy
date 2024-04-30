@@ -2,12 +2,12 @@ import { Minimatch } from 'minimatch';
 import { lstatSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import type { Hierarchy, MinimatchOptions, Node, Options } from '../types.js';
+import type { Hierarchy, MatchOptions, Node, Options } from './types.js';
 
-import { leaf, node } from './factories.js';
-import { readdirRecursive } from './read-dir.js';
+import { leaf, node } from './utils/factories.js';
 import { flatten } from './utils/flatten.js';
 import { isLeaf } from './utils/leaf.js';
+import { readdirRecursive } from './utils/read-dir.js';
 import { resolveType } from './utils/type.js';
 
 /**
@@ -42,7 +42,7 @@ export function hierarchy(
     options.include.pathname ?? Boolean(options.flatten);
 
   /** default minimatch options */
-  const minimatchOptions: MinimatchOptions = {
+  const minimatchOptions: MatchOptions = {
     dot: true,
     matchBase: true,
     ...options?.filter?.options,

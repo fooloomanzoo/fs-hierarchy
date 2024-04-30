@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import type { Type } from '../../types.js';
+import type { Type } from '../types.js';
 
 import { resolveType } from './type.js';
 
@@ -16,7 +16,7 @@ import { resolveType } from './type.js';
  */
 export const isLeaf = (
   pathname: string,
-  type: Type,
+  type: Type | undefined,
   followSymlinks?: boolean,
   rootpath: string = pathname,
 ): boolean => {

@@ -1,6 +1,6 @@
 import type { Hierarchy } from '../types.js';
 
-import { isNode } from '../typeguards.js';
+import { isNode } from '../utils/typeguards.js';
 
 /**
  * Returns a tree-string-representation for a given hierarchy-structure.

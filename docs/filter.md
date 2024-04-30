@@ -19,14 +19,16 @@ Create a hierarchy map of a filesystem using node's built-in *fs*.
 
 USAGE
   $ fs-hierarchy  [DIR] [OUTPUT] [-e] [--flat] [-f
-    tree|yaml|json] [-h] [-i ext|path|stats|type] [-m <value>] [--minify] [-r
-    <value>] [-s] [-v]
+    tree|yaml|json] [-h] [-i ext|path|stats|type] [-m <value>] [-M
+    all|none|some] [--minify] [-r <value>] [-s] [-v]
 
 ARGUMENTS
   DIR     [default: .] path to create a hierarchy from
   OUTPUT  output filename
 
 FLAGS
+  -M, --match-rule=<option>  [default: some] rule for matching paths
+                             <options: all|none|some>
   -e, --empty                include child nodes that have no children
   -f, --format=<option>      [default: json] the used output format
                              <options: tree|yaml|json>
@@ -44,11 +46,16 @@ DESCRIPTION
   Create a hierarchy map of a filesystem using node's built-in *fs*.
 
 FLAG DESCRIPTIONS
+  -M, --match-rule=all|none|some  rule for matching paths
+
+    when set to **all** all filters must resolve successfully,
+    when set to **some** at least one filter must resolve successfully,
+    when set to **none** no filter must resolve successfully
+
   -m, --match=<value>...  filter matching paths
 
     use glob pattern for matching
     negate by leading '!'
-    one of options have to match so the found is included
     e.g. -m '**/*.ts' '!**/node_modules/**'
 
   --flat  flatten the output
@@ -87,6 +94,14 @@ $ fs-hierarchy ./src --match 'index.ts'
     },
     {
       "name": "index.ts"
+    },
+    {
+      "name": "lib",
+      "children": [
+        {
+          "name": "index.ts"
+        }
+      ]
     }
   ]
 }
@@ -124,13 +139,11 @@ $ fs-hierarchy ./src -m 'index.ts' -e
           "children": []
         },
         {
-          "name": "hierarchy",
-          "children": [
-            {
-              "name": "utils",
-              "children": []
-            }
-          ]
+          "name": "index.ts"
+        },
+        {
+          "name": "utils",
+          "children": []
         },
         {
           "name": "write",
@@ -159,9 +172,9 @@ $ fs-hierarchy ./src -m '*@(e|x).ts'
  ╰─ lib
     ├─ format
     │  ╰─ tree.ts
-    ├─ hierarchy
-    │  ╰─ utils
-    │     ╰─ type.ts
+    ├─ index.ts
+    ├─ utils
+    │  ╰─ type.ts
     ╰─ write
        ╰─ file.ts
 
@@ -181,17 +194,34 @@ $ fs-hierarchy ./src -m '**/{json,hierarchy}.ts'
  ╰─ lib
     ├─ format
     │  ╰─ json.ts
-    ╰─ hierarchy
-       ╰─ hierarchy.ts
+    ╰─ hierarchy.ts
 
 
 ```
 
 
-## multiple glob patterns
+## filter by multiple patterns and matching all
  
 ```shell-script
-$ fs-hierarchy ./src -m '*n.ts' '*s.ts'
+$ fs-hierarchy ./src -m 't*.ts' '*s.ts' -M all
+```
+
+
+```
+./src
+ ╰─ lib
+    ├─ types.ts
+    ╰─ utils
+       ╰─ typeguards.ts
+
+
+```
+
+
+## filter by multiple patterns and matching some (default)
+ 
+```shell-script
+$ fs-hierarchy ./src -m '*n.ts' '*s.ts' -M some
 ```
 
 
@@ -200,12 +230,41 @@ $ fs-hierarchy ./src -m '*n.ts' '*s.ts'
  ╰─ lib
     ├─ format
     │  ╰─ json.ts
-    ├─ hierarchy
-    │  ├─ factories.ts
-    │  ╰─ utils
-    │     ╰─ flatten.ts
-    ├─ typeguards.ts
-    ╰─ types.ts
+    ├─ types.ts
+    ╰─ utils
+       ├─ factories.ts
+       ├─ flatten.ts
+       ╰─ typeguards.ts
+
+
+```
+
+
+## filter by multiple patterns and matching none
+ 
+```shell-script
+$ fs-hierarchy ./src -m '*n.ts' '*s.ts' -M none
+```
+
+
+```
+./src
+ ├─ commands
+ │  ╰─ index.ts
+ ├─ index.ts
+ ╰─ lib
+    ├─ format
+    │  ├─ tree.ts
+    │  ╰─ yaml.ts
+    ├─ hierarchy.ts
+    ├─ index.ts
+    ├─ utils
+    │  ├─ leaf.ts
+    │  ├─ read-dir.ts
+    │  ╰─ type.ts
+    ╰─ write
+       ├─ file.ts
+       ╰─ stdout.ts
 
 
 ```
@@ -238,7 +297,7 @@ $ fs-hierarchy ./ -m '!**/{dist,.git,node_modules}/**'
  │  ├─ run.cmd
  │  ╰─ run.js
  ├─ docs
- │  ├─ filters.md
+ │  ├─ filter.md
  │  ├─ format.md
  │  ╰─ using-docker.md
  ├─ oclif.manifest.json
@@ -253,16 +312,16 @@ $ fs-hierarchy ./ -m '!**/{dist,.git,node_modules}/**'
  │     │  ├─ json.ts
  │     │  ├─ tree.ts
  │     │  ╰─ yaml.ts
- │     ├─ hierarchy
- │     │  ├─ factories.ts
- │     │  ├─ hierarchy.ts
- │     │  ├─ read-dir.ts
- │     │  ╰─ utils
- │     │     ├─ flatten.ts
- │     │     ├─ leaf.ts
- │     │     ╰─ type.ts
- │     ├─ typeguards.ts
+ │     ├─ hierarchy.ts
+ │     ├─ index.ts
  │     ├─ types.ts
+ │     ├─ utils
+ │     │  ├─ factories.ts
+ │     │  ├─ flatten.ts
+ │     │  ├─ leaf.ts
+ │     │  ├─ read-dir.ts
+ │     │  ├─ type.ts
+ │     │  ╰─ typeguards.ts
  │     ╰─ write
  │        ├─ file.ts
  │        ╰─ stdout.ts
@@ -270,8 +329,6 @@ $ fs-hierarchy ./ -m '!**/{dist,.git,node_modules}/**'
  ╰─ utils
     ├─ output.ts
     ├─ readme.ts
-    ├─ schema.ts
-    ├─ table.ts
     ╰─ tags.ts
 
 

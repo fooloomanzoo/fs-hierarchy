@@ -16,7 +16,7 @@ import type { Leaf, Node, Options, Type } from '../types.js';
 export function leaf(
   name: string,
   pathname: string,
-  type: Type,
+  type: Type | undefined,
   include: Options['include'] = {},
 ): Leaf {
   const ret: Leaf = {
@@ -55,7 +55,7 @@ export function leaf(
 export function node(
   name: string,
   pathname: string,
-  type: Type,
+  type: Type | undefined,
   include: Options['include'] = {},
 ): Node {
   return {
