@@ -67,9 +67,9 @@ export default class Index extends Command {
     'match-rule': Flags.string({
       char: 'M',
       default: 'some',
-      description: `when set to **all** all filters must resolve successfully,
-        when set to **some** at least one filter must resolve successfully,
-        when set to **none** no filter must resolve successfully`,
+      description: `when set to "all" all filters must resolve successfully,
+        when set to "some" at least one filter must resolve successfully,
+        when set to "none" no filter must resolve successfully`,
       options: ['all', 'none', 'some'],
       summary: 'rule for matching paths',
     }),
