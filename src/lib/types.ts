@@ -14,11 +14,11 @@ export type Type =
   | 'symlink';
 
 /**
- * a Leaf of the hierarchy map
+ * a Leaf of the hierarchy
  **/
 export type Leaf = {
   /**
-   * optionally included extension (only for Leafs)
+   * optionally included extension (only for `Leaf`s)
    **/
   extension?: string;
   /**
@@ -30,31 +30,30 @@ export type Leaf = {
    **/
   path?: string;
   /**
-   * optionally included stats (https://nodejs.org/api/fs.html#fs_class_fs_stats)
+   * optionally included `Stats` (https://nodejs.org/api/fs.html#fs_class_fs_stats)
    **/
   stats?: Stats;
   /**
-   * optionally included Type in the filesystem
+   * optionally included `Type` in the filesystem
    **/
   type?: Type;
 };
 
-/** a Node of the hierarchy map */
+/**
+ * a Node of the hierarchy
+ * */
 export type Node = {
   /**
-   * children of the node
+   * children of the `Node`
    * @defaultValue `[]`
    **/
   children: Array<Leaf | Node>;
 } & Omit<Leaf, 'extension'>;
 
-/**
- * The hierarchy map that will be returned. It can either be a Leaf or a Node.
- **/
 export type Hierarchy = Leaf | Node;
 
 /**
- * minimatch options for filtering (https://github.com/isaacs/minimatch#options)
+ * `minimatch` options for filtering (https://github.com/isaacs/minimatch#options)
  **/
 export type MatchOptions = {
   /** @defaultValue true */
@@ -66,9 +65,9 @@ export type MatchOptions = {
 /**
  * The logical rule how filter patterns should be applied
  *
- * when set to "all" all filters must resolve successfully,
- * when set to "some" at least one filter must resolve successfully,
- * when set to "none" no filter must resolve successfully
+ * when set to `all` all filters must resolve successfully,
+ * when set to `some` at least one filter must resolve successfully,
+ * when set to `none` no filter must resolve successfully
  */
 export type MatchRule = 'all' | 'none' | 'some';
 
@@ -81,11 +80,11 @@ export type Options = {
    */
   filter?: {
     /**
-     * when "true" and a Node has no children, the node will still be included in the output
+     * when `true` and a `Node` has no children, the node will still be included in the output
      **/
     empty?: boolean;
     /**
-     * glob filters for the absolute path of the found Nodes. when all filters resolve successfully the node will be included. (negate by leading **!**)
+     * glob filters for the absolute path of the found `Node`s. when all filters resolve successfully the `Node` will be included. (negate by leading **!**)
      **/
     match?: string | string[];
     /**
@@ -98,7 +97,7 @@ export type Options = {
     rule?: MatchRule;
   };
   /**
-   * when "true" the hierarchy will be flattened. in cli, when "json" is the output format, the pathname is automatically included, for the other output formats the pathname will be used instead of the filename.
+   * when `true`, the hierarchy will be flattened.
    **/
   flatten?: boolean;
   /**
@@ -106,19 +105,19 @@ export type Options = {
    **/
   include?: {
     /**
-     * when "true", include the extension in return object (only for Leafs)
+     * when `true`, include the extension in return object (only for `Leaf`s)
      **/
     extension?: boolean;
     /**
-     * when "true", include the absolute path in return object
+     * when `true`, include the absolute path in return object
      **/
     pathname?: boolean;
     /**
-     * when "true", include stats in return object (https://nodejs.org/api/fs.html#fs_class_fs_stats)
+     * when `true`, include stats in return object (https://nodejs.org/api/fs.html#fs_class_fs_stats)
      **/
     stats?: boolean;
     /**
-     * when "true", include the type in return object
+     * when `true`, include the type in return object
      **/
     type?: boolean;
   };
@@ -127,7 +126,7 @@ export type Options = {
    **/
   rootName?: string;
   /**
-   * when "true", symlinks are followed
+   * when `true`, symlinks are followed
    **/
   symlinks?: boolean;
 };

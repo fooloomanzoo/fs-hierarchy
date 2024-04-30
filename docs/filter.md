@@ -286,8 +286,6 @@ $ fs-hierarchy ./ -m '!**/{dist,.git,node_modules}/**'
  ├─ .gitignore
  ├─ .npmrc
  ├─ .prettierrc
- ├─ .vscode
- │  ╰─ settings.json
  ├─ Dockerfile
  ├─ LICENSE
  ├─ README.md

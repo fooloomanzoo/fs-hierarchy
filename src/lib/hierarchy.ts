@@ -2,7 +2,7 @@ import { Minimatch } from 'minimatch';
 import { lstatSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import type { Hierarchy, MatchOptions, Node, Options } from './types.js';
+import type { Hierarchy, Leaf, MatchOptions, Node, Options } from './types.js';
 
 import { leaf, node } from './utils/factories.js';
 import { flatten } from './utils/flatten.js';
@@ -32,7 +32,7 @@ export function hierarchy(
     rootName: resolve(root),
     symlinks: false,
   },
-): Hierarchy {
+): Leaf | Node {
   const resolvedPath = resolve(root);
   const type = resolveType(lstatSync(resolvedPath));
 
