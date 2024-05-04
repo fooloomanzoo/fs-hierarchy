@@ -47,9 +47,9 @@ DESCRIPTION
 FLAG DESCRIPTIONS
   -M, --match-rule=all|none|some  rule for matching paths
 
-    when set to **all** all filters must resolve successfully,
-    when set to **some** at least one filter must resolve successfully,
-    when set to **none** no filter must resolve successfully
+    when set to "all" all filters must resolve successfully,
+    when set to "some" at least one filter must resolve successfully,
+    when set to "none" no filter must resolve successfully
 
   -m, --match=<value>...  filter matching paths
 
@@ -298,7 +298,7 @@ $ fs-hierarchy ./src/lib/format -i ext path type stats
   "path": "/Users/fooloo/projects/fs-hierarchy/src/lib/format",
   "type": "dir",
   "stats": {
-    "dev": 16777230,
+    "dev": 16777233,
     "mode": 16877,
     "nlink": 5,
     "uid": 501,
@@ -324,7 +324,7 @@ $ fs-hierarchy ./src/lib/format -i ext path type stats
       "extension": ".ts",
       "type": "file",
       "stats": {
-        "dev": 16777230,
+        "dev": 16777233,
         "mode": 33188,
         "nlink": 1,
         "uid": 501,
@@ -350,7 +350,7 @@ $ fs-hierarchy ./src/lib/format -i ext path type stats
       "extension": ".ts",
       "type": "file",
       "stats": {
-        "dev": 16777230,
+        "dev": 16777233,
         "mode": 33188,
         "nlink": 1,
         "uid": 501,
@@ -376,7 +376,7 @@ $ fs-hierarchy ./src/lib/format -i ext path type stats
       "extension": ".ts",
       "type": "file",
       "stats": {
-        "dev": 16777230,
+        "dev": 16777233,
         "mode": 33188,
         "nlink": 1,
         "uid": 501,

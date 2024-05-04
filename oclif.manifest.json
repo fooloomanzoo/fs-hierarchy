@@ -58,6 +58,16 @@
         "include": {
           "char": "i",
           "name": "include",
+          "relationships": [
+            {
+              "flags": [
+                {
+                  "name": "format"
+                }
+              ],
+              "type": "none"
+            }
+          ],
           "summary": "the included informations in return object",
           "hasDynamicHelp": false,
           "multiple": true,
@@ -80,7 +90,7 @@
         },
         "match-rule": {
           "char": "M",
-          "description": "when set to **all** all filters must resolve successfully,\n        when set to **some** at least one filter must resolve successfully,\n        when set to **none** no filter must resolve successfully",
+          "description": "when set to \"all\" all filters must resolve successfully,\n        when set to \"some\" at least one filter must resolve successfully,\n        when set to \"none\" no filter must resolve successfully",
           "name": "match-rule",
           "summary": "rule for matching paths",
           "default": "some",

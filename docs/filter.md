@@ -48,9 +48,9 @@ DESCRIPTION
 FLAG DESCRIPTIONS
   -M, --match-rule=all|none|some  rule for matching paths
 
-    when set to **all** all filters must resolve successfully,
-    when set to **some** at least one filter must resolve successfully,
-    when set to **none** no filter must resolve successfully
+    when set to "all" all filters must resolve successfully,
+    when set to "some" at least one filter must resolve successfully,
+    when set to "none" no filter must resolve successfully
 
   -m, --match=<value>...  filter matching paths
 
@@ -285,6 +285,7 @@ $ fs-hierarchy ./ -m '!**/{dist,.git,node_modules}/**'
  ├─ .gitattributes
  ├─ .gitignore
  ├─ .npmrc
+ ├─ .nvmrc
  ├─ .prettierrc
  ├─ Dockerfile
  ├─ LICENSE

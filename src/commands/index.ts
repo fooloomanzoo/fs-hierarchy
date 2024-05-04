@@ -53,6 +53,17 @@ export default class Index extends Command {
       char: 'i',
       multiple: true,
       options: ['ext', 'path', 'stats', 'type'],
+      relationships: [
+        {
+          flags: [
+            {
+              name: 'format',
+              when: async flags => flags.format === 'tree',
+            },
+          ],
+          type: 'none',
+        },
+      ],
       summary: 'the included informations in return object',
     }),
     'match': Flags.string({
@@ -110,14 +121,15 @@ export default class Index extends Command {
     const { args, flags } = await this.parse(Index);
     const { empty, flat, format, include, match, minify, root, symlinks } =
       flags;
-    const included = include?.length
-      ? {
-          extension: include?.includes('ext'),
-          pathname: include?.includes('path'),
-          stats: include?.includes('stats'),
-          type: include?.includes('type'),
-        }
-      : { pathname: flat };
+    const included =
+      format !== 'tree' && include?.length
+        ? {
+            extension: include?.includes('ext'),
+            pathname: include?.includes('path'),
+            stats: include?.includes('stats'),
+            type: include?.includes('type'),
+          }
+        : { pathname: flat };
 
     let formatter: (h: Hierarchy, flatten?: boolean) => string;
     let writer = toStdOut;
